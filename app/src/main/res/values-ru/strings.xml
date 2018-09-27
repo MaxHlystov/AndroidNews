@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Максим Хлыстов</string>
+    <string name="photo">Фото</string>
+    <string name="description">Я программирую больше двадцати лет на разных языках. И люблю решать сложные задачи.</string>
+    <string name="NoEmail">Не найдена почтовая программа</string>
+    <string name="phd_text">К.т.н. САПР АСТПП</string>
+    <string name="text_1c_worker">1С: Управление холдингом</string>
+    <string name="top_ten_stepik">В десятке лучших на stepik.orgt</string>
+    <string name="enter_a_message">Введите сообщение…</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="copyright">© 2018 Максим Хлыстов</string>
+    <string name="greeting">Привет!</string>
+</resources>
