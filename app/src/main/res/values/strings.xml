@@ -8,11 +8,10 @@
     <string name="enter_a_message">Enter a message…</string>
     <string name="send_message">SEND MESSAGE</string>
     <string name="copyright">© 2018 Maksim Khlystov</string>
-    <string name="NoEmail">Email program not found</string>
-    <string name="my_email" translatable="false">maxvls@gmail.com</string>
+    <string name="no_email">Email program not found</string>
     <string name="url_telegram" translatable="false">https://t.me/max1c</string>
     <string name="url_github" translatable="false">https://github.com/MaxHlystov</string>
     <string name="url_linkedin" translatable="false">https://linkedin.com/pub/maxim-khlystov/a7/6ba/123</string>
-    <string name="stepik" translatable="false">https://stepik.org/leaders/knowledge</string>
     <string name="greeting">Hello!</string>
+    <string name="no_browser_error">You haven\'t browser to show a link</string>
 </resources>

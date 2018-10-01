@@ -1,89 +1,53 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/key_start_margin"
         android:layout_marginEnd="@dimen/half_margin">
 
-
-        <LinearLayout
-            android:id="@+id/key_info_line1"
-            android:layout_width="wrap_content"
+        <ru.fmtkl.hlystov.imagedlistitem.ImagedTextView
+            android:id="@+id/key_info1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_margin="@dimen/half_margin"
-            android:orientation="horizontal">
+            android:textSize="@dimen/normal_text_size"
+            custom:imageToTextMargin="@dimen/half_margin"
+            custom:src="@drawable/ic_baseline_school"
+            custom:text="@string/phd_text" />
 
-            <ImageView
-                android:layout_width="@dimen/key_icon_size"
-                android:layout_height="@dimen/key_icon_size"
-                android:layout_marginEnd="@dimen/key_end_margin"
-                android:contentDescription="@string/photo"
-                android:src="@drawable/ic_baseline_school" />
-
-            <TextView
-                android:id="@+id/key_info1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/phd_text"
-                android:textSize="@dimen/normal_text_size" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/key_info_line2"
-            android:layout_width="wrap_content"
+        <ru.fmtkl.hlystov.imagedlistitem.ImagedTextView
+            android:id="@+id/key_info2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/key_info_line1"
+            android:layout_below="@id/key_info1"
             android:layout_margin="@dimen/half_margin"
-            android:orientation="horizontal">
+            android:textSize="@dimen/normal_text_size"
+            custom:imageToTextMargin="@dimen/half_margin"
+            custom:src="@drawable/ic_stepik_logo"
+            custom:text="@string/top_ten_stepik" />
 
-            <ImageView
-                android:layout_width="@dimen/key_icon_size"
-                android:layout_height="@dimen/key_icon_size"
-                android:layout_marginEnd="@dimen/key_end_margin"
-                android:contentDescription="@string/photo"
-                android:src="@drawable/stepik_logo" />
-
-            <TextView
-                android:id="@+id/key_info2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/top_ten_stepik"
-                android:textSize="@dimen/normal_text_size" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/key_info_line3"
-            android:layout_width="wrap_content"
+        <ru.fmtkl.hlystov.imagedlistitem.ImagedTextView
+            android:id="@+id/key_info3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/key_info_line2"
+            android:layout_below="@id/key_info2"
             android:layout_margin="@dimen/half_margin"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/key_icon_size"
-                android:layout_height="@dimen/key_icon_size"
-                android:layout_marginEnd="@dimen/key_end_margin"
-                android:contentDescription="@string/photo"
-                android:src="@drawable/ic_1c_companylogo" />
-
-            <TextView
-                android:id="@+id/key_info3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_1c_worker"
-                android:textSize="@dimen/normal_text_size" />
-        </LinearLayout>
+            android:textSize="@dimen/normal_text_size"
+            custom:imageToTextMargin="@dimen/half_margin"
+            custom:src="@drawable/ic_1c_logo"
+            custom:text="@string/text_1c_worker" />
 
         <View
             android:id="@+id/descr_top_line"
             android:layout_width="match_parent"
             android:layout_height="@dimen/thin_line"
-            android:layout_below="@id/key_info_line3"
+            android:layout_below="@id/key_info3"
             android:layout_margin="@dimen/half_margin"
             android:background="@color/red" />
 
@@ -113,6 +77,7 @@
             android:layout_margin="@dimen/half_margin"
             android:autofillHints="@string/greeting"
             android:hint="@string/enter_a_message"
+            android:inputType="text"
             android:lines="1"
             android:textSize="@dimen/normal_text_size" />
 

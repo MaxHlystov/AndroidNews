@@ -1,10 +1,22 @@
 package ru.fmtk.khlystov.androidnews;
 
 
+import android.support.annotation.NonNull;
+
 public interface IConfigValues {
+
+    @NonNull
     String getMyEmail();
-    String getURL_Telegram();
-    String getURL_Github();
-    String getURL_Linkedin();
-    String getURL_Stepik();
+
+    @NonNull
+    SocialNetwork getURLTelegram();
+
+    @NonNull
+    SocialNetwork getURLGithub();
+
+    @NonNull
+    SocialNetwork getURLLinkedin();
+
+    @NonNull
+    SocialNetwork getURLStepik();
 }
