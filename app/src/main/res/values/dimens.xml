@@ -4,10 +4,8 @@
     <dimen name="normal_text_size">12sp</dimen>
     <dimen name="key_icon_size">28dp</dimen>
     <dimen name="my_portfolio__icon_size">64dp</dimen>
-    <dimen name="key_end_margin">8dp</dimen>
     <dimen name="key_start_margin">42dp</dimen>
     <dimen name="half_margin">8dp</dimen>
-    <dimen name="zero_margin">0dp</dimen>
     <dimen name="thick_line">2dp</dimen>
     <dimen name="thin_line">1dp</dimen>
 </resources>

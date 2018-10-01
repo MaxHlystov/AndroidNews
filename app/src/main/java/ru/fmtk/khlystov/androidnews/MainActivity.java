@@ -2,7 +2,6 @@ package ru.fmtk.khlystov.androidnews;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Button;
-import android.widget.Toast;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntent;
+import ru.fmtk.khlystov.thirdpartyintentutils.MailIntent;
+import ru.fmtkl.hlystov.imagedlistitem.ImagedTextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,71 +25,79 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addTextView(this, findViewById(R.id.main),
-                getString(R.string.copyright));
+        createCopyright();
 
-        ImageView img_telegram = findViewById(R.id.telega);
-        ImageView img_github = findViewById(R.id.github);
-        ImageView img_linkedin = findViewById(R.id.linkedin);
-        TextView tv_msg = findViewById(R.id.message);
-        Button btn_send_mail = findViewById(R.id.btn_send_message);
-        TextView tv_stepik = findViewById(R.id.key_info2);
+        ImageView imgTelegram = findViewById(R.id.telega);
+        ImageView imgGithub = findViewById(R.id.github);
+        ImageView imgLinkedin = findViewById(R.id.linkedin);
+        TextView tvMsg = findViewById(R.id.message);
+        Button btnSendMail = findViewById(R.id.btn_send_message);
+        ImagedTextView tvStepik = findViewById(R.id.key_info2);
 
         IConfigValues config = ConfigValues.getConfig();
 
-        img_telegram.setOnClickListener((View img) -> {
-            BrowserOpener.openURL(this, config.getURL_Telegram());
-        });
+        imgTelegram.setOnClickListener((View view) ->
+                socialLinkOnClickHandler(view, config.getURLTelegram()));
 
-        img_github.setOnClickListener((View img) -> {
-            BrowserOpener.openURL(this, config.getURL_Github());
-        });
+        imgGithub.setOnClickListener((View view) ->
+                socialLinkOnClickHandler(view, config.getURLGithub()));
 
-        img_linkedin.setOnClickListener((View img) -> {
-            BrowserOpener.openURL(this, config.getURL_Linkedin());
-        });
+        imgLinkedin.setOnClickListener((View view) ->
+                socialLinkOnClickHandler(view, config.getURLLinkedin()));
 
-        tv_stepik.setOnClickListener((View tv) -> {
-            BrowserOpener.openURL(this, config.getURL_Stepik());
-        });
+        tvStepik.setOnClickListener((View view) ->
+                socialLinkOnClickHandler(view, config.getURLStepik()));
 
-        btn_send_mail.setOnClickListener((View tv) -> {
-            @Nullable Intent i = getMailIntent(config.getMyEmail(), getString(R.string.greeting), tv_msg.getText().toString());
-            if (i != null) {
-                startActivity(i);
-            } else {
-                Snackbar.make(tv, getString(R.string.NoEmail), Snackbar.LENGTH_LONG).show();
-            }
-
+        btnSendMail.setOnClickListener((View view) -> {
+            Intent intent = MailIntent.get(config.getMyEmail(),
+                    getString(R.string.greeting),
+                    tvMsg.getText().toString());
+            showIntent(view, intent, getString(R.string.no_email));
         });
     }
 
-    private @Nullable TextView addTextView(@NonNull Activity activity,
-                                 @NonNull RelativeLayout parent,
-                                 @NonNull CharSequence text) {
-        int margin = getResources().getDimensionPixelOffset(R.dimen.half_margin);
+    private void createCopyright() {
+        RelativeLayout.LayoutParams layoutParams = getDefaultRLayoutParams();
+        layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.social);
+        addTextView(this, findViewById(R.id.main),
+                getString(R.string.copyright), layoutParams);
+    }
+
+    private void addTextView(@NonNull Activity activity,
+                             @NonNull RelativeLayout parent,
+                             @NonNull CharSequence text,
+                             @NonNull RelativeLayout.LayoutParams layoutParams) {
         TextView tv = new TextView(activity);
         tv.setText(text);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, // width
-                ViewGroup.LayoutParams.WRAP_CONTENT); // height
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layoutParams.setMargins(margin, margin, margin, margin);
         tv.setLayoutParams(layoutParams);
         parent.addView(tv);
-        return tv;
     }
 
-    private @Nullable Intent getMailIntent(@NonNull String to,
-                                 @NonNull String subject,
-                                 @NonNull String msg) {
-        Intent i = new Intent(Intent.ACTION_SENDTO);
-        String mailto = "mailto:" + to + "?subject=" + subject + "&body=" + msg;
-        i.setData(Uri.parse(mailto));
-        if (i.resolveActivity(getPackageManager()) != null)
-            return i;
-        return null;
+    @NonNull
+    private RelativeLayout.LayoutParams getDefaultRLayoutParams() {
+        int margin = getResources().getDimensionPixelOffset(R.dimen.half_margin);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, // width
+                ViewGroup.LayoutParams.WRAP_CONTENT); // height
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParams.setMargins(margin, margin, margin, margin);
+        return layoutParams;
     }
 
+    private void socialLinkOnClickHandler(@NonNull View parent, @NonNull SocialNetwork link) {
+        showIntent(parent,
+                BrowserIntent.get(link.getUrl()),
+                getString(R.string.no_browser_error));
+    }
+
+    private void showIntent(@NonNull View parent,
+                            @NonNull Intent intent,
+                            @NonNull String errorMessage) {
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Snackbar.make(parent, errorMessage, Snackbar.LENGTH_LONG).show();
+        }
+    }
 }

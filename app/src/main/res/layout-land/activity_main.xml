@@ -8,19 +8,17 @@
     <ImageView
         android:id="@+id/my_photo"
         android:layout_width="@dimen/photo_size"
-        android:layout_height="@dimen/photo_size"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/photo"
+        android:scaleType="centerCrop"
         android:src="@drawable/my_head" />
 
-    <RelativeLayout
+    <include
+        layout="@layout/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/my_photo">
-
-        <include layout="@layout/content" />
-
-    </RelativeLayout>
+        android:layout_toEndOf="@id/my_photo" />
 
 </RelativeLayout>
