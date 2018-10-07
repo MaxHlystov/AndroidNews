@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Максим Хлыстов</string>
+    <string name="app_name">Новостной агрегатор</string>
     <string name="photo">Фото</string>
     <string name="description">Я программирую больше двадцати лет на разных языках. И люблю решать сложные задачи.</string>
     <string name="no_email">Не найдена почтовая программа</string>
@@ -12,4 +12,16 @@
     <string name="copyright">© 2018 Максим Хлыстов</string>
     <string name="greeting">Привет!</string>
     <string name="no_browser_error">У вас не установлен браузер</string>
+    <string name="about_menu_item">О программе</string>
+    <string name="activity_about__my_name">Максим Хлыстов</string>
+    <string name="news_image">Картинка к новости</string>
+    <string name="country_code">ru</string>
+    <string name="main_menu__get_online_news">Получать новости онлайн</string>
+    <string name="share_link">Отправить ссылку</string>
+    <string name="nyt_data_converter__just_now_format">только что,%s</string>
+    <string name="nyt_data_converter__an_hour_format">Час назад,%s</string>
+    <string name="nyt_data_converter__some_hours_format">%d ч. назад,%s</string>
+    <string name="nyt_data_converter__yesterday_format">Вчера,%s</string>
+    <string name="nyt_data_converter__day_of_month_format">dd MMM,%s</string>
+    <string name="news_recycler_adapter__source_undefined">Неопознанный пишуший объект</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ImagedText">
+    <declare-styleable name="ImagedTextView">
         <attr name="text" format="string" />
         <attr name="src" format="string" />
         <attr name="imageToTextMargin" format="string" />

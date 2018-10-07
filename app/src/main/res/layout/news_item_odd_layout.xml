@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/news_item_layout__item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/news_item_layout__card_padding">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/news_item_layout__source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="@dimen/news_item_layout__source_text_size"
+            tools:text="@tools:sample/lorem" />
+
+        <TextView
+            android:id="@+id/news_item_layout__title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textSize="@dimen/news_item_layout__title_text_size"
+            android:textStyle="bold"
+            tools:text="@tools:sample/lorem/random" />
+
+        <TextView
+            android:id="@+id/news_item_layout__preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:textSize="@dimen/news_item_layout__preview_text_size"
+            tools:text="@tools:sample/lorem/random" />
+
+        <TextView
+            android:id="@+id/news_item_layout__published"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/news_item_layout__date_margin_end"
+            android:textSize="@dimen/news_item_layout__date_text_size"
+            tools:text="@tools:sample/date/ddmmyy" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/news_item_layout__image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/news_item_layout__text_img_margin"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/news_image"
+        android:scaleType="centerInside"
+        tools:src="@tools:sample/avatars" />
+
+</LinearLayout>

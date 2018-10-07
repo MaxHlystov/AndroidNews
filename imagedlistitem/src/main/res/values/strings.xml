@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">ImagedListItem</string>
-    <string name="contentDescr">Test content descr</string>
+    <string name="app_name" translatable="false">ImagedListItem</string>
+    <string name="item_image_description">item\'s image description</string>
 </resources>

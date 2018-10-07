@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 public class BrowserIntent {
 
     private BrowserIntent() {
+        throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
 
     @NonNull

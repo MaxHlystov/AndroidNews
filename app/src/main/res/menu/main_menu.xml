@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_menu__get_online_news"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/main_menu__get_online_news" />
+    <item
+        android:id="@+id/main_menu__about_item"
+        android:title="@string/about_menu_item" />
+</menu>

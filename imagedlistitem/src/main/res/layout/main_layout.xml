@@ -14,7 +14,8 @@
         tools:layout_marginEnd="@dimen/half_margin"
         tools:layout_width="@dimen/key_icon_size"
         tools:src="@tools:sample/avatars"
-        tools:contentDescription="@string/contentDescr"/>
+        tools:contentDescription="@tools:sample/lorem"
+        android:contentDescription="@string/item_image_description" />
 
     <TextView
         android:id="@+id/layout_imaged_text__text"

@@ -34,7 +34,7 @@ public class ImagedTextView extends LinearLayout {
         try {
             typedArray = context.obtainStyledAttributes(
                     attrs,
-                    R.styleable.ImagedText,
+                    R.styleable.ImagedTextView,
                     defStyleAttr,
                     defStyleAttr);
         } catch (Exception ex) {
@@ -44,9 +44,9 @@ public class ImagedTextView extends LinearLayout {
         }
         if (typedArray != null) {
             try {
-                image = typedArray.getDrawable(R.styleable.ImagedText_src);
-                imageToTextMargin = typedArray.getDimensionPixelOffset(R.styleable.ImagedText_imageToTextMargin, 0);
-                text = typedArray.getString(R.styleable.ImagedText_text);
+                image = typedArray.getDrawable(R.styleable.ImagedTextView_src);
+                imageToTextMargin = typedArray.getDimensionPixelOffset(R.styleable.ImagedTextView_imageToTextMargin, 0);
+                text = typedArray.getString(R.styleable.ImagedTextView_text);
             } finally {
                 typedArray.recycle();
             }
