@@ -18,9 +18,10 @@ public class Source implements Parcelable {
         this(in.readString(), in.readString());
     }
 
+    @NonNull
     public static final Creator<Source> CREATOR = new Creator<Source>() {
         @Override
-        public Source createFromParcel(Parcel in) {
+        public Source createFromParcel(@NonNull Parcel in) {
             return new Source(in);
         }
 
@@ -30,16 +31,18 @@ public class Source implements Parcelable {
         }
     };
 
+    @Nullable
     public String getId() {
         return id;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Source source = (Source) o;
@@ -59,12 +62,15 @@ public class Source implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(name);
     }
 
+    @Nullable
     private final String id;
+
+    @Nullable
     private final String name;
 
 }

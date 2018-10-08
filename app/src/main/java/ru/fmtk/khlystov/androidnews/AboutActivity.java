@@ -20,7 +20,7 @@ import ru.fmtkl.hlystov.imagedlistitem.ImagedTextView;
 
 public class AboutActivity extends AppCompatActivity {
 
-    public static void startActivity(Activity parent) {
+    public static void startActivity(@NonNull Activity parent) {
         Intent intent = new Intent(parent, AboutActivity.class);
         parent.startActivity(intent);
     }

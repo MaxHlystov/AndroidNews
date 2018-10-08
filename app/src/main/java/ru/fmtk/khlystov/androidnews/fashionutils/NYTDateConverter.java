@@ -78,11 +78,25 @@ public class NYTDateConverter implements IDateConverter {
     }
 
     private final boolean is24HourFormat;
+
+    @NonNull
     private final DateFormat dateFormat;
+
+    @NonNull
     private final Locale currentLocale;
+
+    @NonNull
     private final String justNowFormat;
+
+    @NonNull
     private final String anHourFormat;
+
+    @NonNull
     private final String someHoursFormat;
+
+    @NonNull
     private final String yesterdayFormat;
+
+    @NonNull
     private final String dayOfMonthFormat;
 }

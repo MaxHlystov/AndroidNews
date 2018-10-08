@@ -58,7 +58,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detailed_news_menu, menu);
         if (article != null) {
@@ -151,6 +151,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
         IDateConverter dateConverter = new NYTDateConverter(getApplicationContext());
         return dateConverter.convert(publishedAt);
     }
+
 
     private String inflateContent(@Nullable String content, int needLength) {
         String template = isEmpty(content) ? simpleString : content;

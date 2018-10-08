@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,7 +26,7 @@ import ru.fmtk.khlystov.newsgetter.NewsResponse;
 public class NewsListActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
         if (savedInstanceState != null) {
@@ -43,7 +44,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news);
@@ -54,7 +55,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu__about_item:
                 AboutActivity.startActivity(this);
@@ -120,8 +121,11 @@ public class NewsListActivity extends AppCompatActivity {
         return getResources().getConfiguration().orientation;
     }
 
+    @NonNull
     private static final String CONFIG_GET_ONLINE_NEWS = "NewsListActivity_GetOnlineNews";
 
+    @Nullable
     private Disposable disposableNewsGetter = null;
+
     private boolean getOnlineNews;
 }

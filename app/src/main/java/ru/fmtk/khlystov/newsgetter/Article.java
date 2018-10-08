@@ -122,10 +122,10 @@ public class Article implements Parcelable {
         dest.writeLong(publishedAt != null ? publishedAt.getTime() : -1L);
     }
 
-    @SuppressWarnings("unused")
+    @NonNull
     public static final Parcelable.Creator<Article> CREATOR = new Parcelable.Creator<Article>() {
         @Override
-        public Article createFromParcel(Parcel in) {
+        public Article createFromParcel(@NonNull Parcel in) {
             return new Article(in);
         }
 
@@ -135,12 +135,27 @@ public class Article implements Parcelable {
         }
     };
 
+    @Nullable
     private final Source source;
+
+    @Nullable
     private final String author;
+
+    @Nullable
     private final String title;
+
+    @Nullable
     private final String description;
+
+    @Nullable
     private final String content;
+
+    @Nullable
     private final String url;
+
+    @Nullable
     private final String urlToImage;
+
+    @Nullable
     private final Date publishedAt;
 }

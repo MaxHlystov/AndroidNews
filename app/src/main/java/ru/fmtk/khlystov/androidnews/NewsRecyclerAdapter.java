@@ -210,7 +210,12 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         protected final ImageView image;
     }
 
+    @NonNull
     private final IDateConverter dateConverter;
+
+    @NonNull
     private final List<Article> articles;
+
+    @Nullable
     private final OnItemClickListener onClickListener;
 }

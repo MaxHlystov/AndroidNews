@@ -31,7 +31,8 @@ public class NewsGetter {
     }
 
     public @Nullable
-    Disposable observeNews(Consumer<? super NewsResponse> onProc, Consumer<? super Throwable> onError) {
+    Disposable observeNews(@NonNull Consumer<? super NewsResponse> onProc,
+                           @NonNull Consumer<? super Throwable> onError) {
         Observable<NewsResponse> obs = Observable.create((ObservableEmitter<String> it) -> {
             if (online) {
                 createOnlineRequest(it);
@@ -45,8 +46,8 @@ public class NewsGetter {
         return obs.subscribe(onProc, onError);
     }
 
-    private void createOnlineRequest(ObservableEmitter<String> emitter) throws IOException {
-       URL url = new URL(String.format(formatNewsURL, countryCode, BuildConfig.APIkey));
+    private void createOnlineRequest(@NonNull ObservableEmitter<String> emitter) throws IOException {
+        URL url = new URL(String.format(formatNewsURL, countryCode, BuildConfig.APIkey));
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
         try {
             urlConn.connect();
@@ -86,9 +87,12 @@ public class NewsGetter {
         return charsCopied;
     }
 
+    @NonNull
     private final String countryCode;
+
     private final boolean online;
 
+    @NonNull
     private static final String formatNewsURL = "https://newsapi.org/v2/top-headlines?country=%s&apiKey=%s";
     private static final int bufferSize = 8 * 1024;
 }
