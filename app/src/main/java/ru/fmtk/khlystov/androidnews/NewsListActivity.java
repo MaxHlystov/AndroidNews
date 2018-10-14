@@ -42,12 +42,8 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-        if (savedInstanceState != null) {
-            SharedPreferences shp = getSharedPreferences(ALTERNATIVE_CONFIG, Context.MODE_PRIVATE);
-            getOnlineNews = shp.getBoolean(CONFIG_GET_ONLINE_NEWS, true);
-        } else {
-            getOnlineNews = true;
-        }
+        SharedPreferences shp = getSharedPreferences(ALTERNATIVE_CONFIG, Context.MODE_PRIVATE);
+        getOnlineNews = shp.getBoolean(CONFIG_GET_ONLINE_NEWS, true);
         updateNews();
     }
 
