@@ -22,4 +22,5 @@ public class IntentUtils {
             Snackbar.make(parent, errorMessage, Snackbar.LENGTH_LONG).show();
         }
     }
+
 }

@@ -1,13 +1,13 @@
 package ru.fmtk.khlystov.androidnews.fashionutils;
 
 import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
 
 public interface IDateConverter {
-    @NotNull String convert(@Nullable Date date);
+    @NonNull String convert(@Nullable Date date);
 }
 

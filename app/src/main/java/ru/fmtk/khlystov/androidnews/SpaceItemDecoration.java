@@ -7,6 +7,8 @@ import android.view.View;
 
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
+    private final int space;
+
     public SpaceItemDecoration(int space) {
         this.space = space;
     }
@@ -19,6 +21,4 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
             outRect.bottom = space;
         }
     }
-
-    private final int space;
 }

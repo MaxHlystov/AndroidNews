@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Date;
 
 import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
@@ -28,6 +26,15 @@ import ru.fmtk.khlystov.thirdpartyintentutils.IntentUtils;
 import static android.text.TextUtils.isEmpty;
 
 public class NewsDetailesActivity extends AppCompatActivity {
+
+    @Nullable
+    private Article article = null;
+
+    @NonNull
+    private static final String ARTICLE_OBJECT = "NewsDetailesActivity_ARTICLE_OBJECT";
+
+    @NonNull
+    private static final String simpleString = "0123456789";
 
     public static void startActivity(@NonNull Activity parent, @NonNull Article article) {
         Intent intent = new Intent(parent, NewsDetailesActivity.class);
@@ -72,7 +79,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.detailed_news_menu__share) {
             goToArticleLink();
         }
@@ -80,12 +87,14 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     private void goToArticleLink() {
-        String url = article.getUrl();
-        if(url != null) {
-            IntentUtils.showIntent(this,
-                    findViewById(R.id.activity_news_detailes_layout__content),
-                    BrowserIntent.get(url),
-                    getString(R.string.no_browser_error));
+        if(article != null) {
+            String url = article.getUrl();
+            if (url != null) {
+                IntentUtils.showIntent(this,
+                        findViewById(R.id.activity_news_detailes_layout__content),
+                        BrowserIntent.get(url),
+                        getString(R.string.no_browser_error));
+            }
         }
     }
 
@@ -164,9 +173,4 @@ public class NewsDetailesActivity extends AppCompatActivity {
         }
         return content;
     }
-
-    private Article article = null;
-
-    private static final String ARTICLE_OBJECT = "NewsDetailesActivity_ARTICLE_OBJECT";
-    private static final String simpleString = "0123456789";
 }

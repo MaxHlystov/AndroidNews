@@ -36,8 +36,9 @@
 
             <LinearLayout
                 android:id="@+id/activity_news_detailes_layout__left_column"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/activity_news_detailes_layout__image"
                 android:layout_alignParentEnd="true"
                 android:orientation="vertical"
                 android:padding="@dimen/activity_news_detailes_layout__left_column_padding">

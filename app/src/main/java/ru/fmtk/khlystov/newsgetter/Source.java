@@ -9,6 +9,12 @@ import java.util.Objects;
 
 public class Source implements Parcelable {
 
+    @Nullable
+    private final String id;
+
+    @Nullable
+    private final String name;
+
     public Source(@Nullable String id, @Nullable String name) {
         this.id = id;
         this.name = name;
@@ -43,8 +49,12 @@ public class Source implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Source source = (Source) o;
         return Objects.equals(getId(), source.getId()) &&
                 Objects.equals(getName(), source.getName());
@@ -66,11 +76,5 @@ public class Source implements Parcelable {
         dest.writeString(id);
         dest.writeString(name);
     }
-
-    @Nullable
-    private final String id;
-
-    @Nullable
-    private final String name;
 
 }

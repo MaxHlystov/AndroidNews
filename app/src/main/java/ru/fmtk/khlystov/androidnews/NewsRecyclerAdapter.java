@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +21,17 @@ import static android.text.TextUtils.isEmpty;
 
 public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder> {
 
+    @NonNull
+    private final IDateConverter dateConverter;
+
+    @NonNull
+    private final List<Article> articles;
+
+    @Nullable
+    private final OnItemClickListener onClickListener;
+
     public NewsRecyclerAdapter(@NonNull List<Article> articles,
-                               @NotNull IDateConverter dateConverter,
+                               @NonNull IDateConverter dateConverter,
                                @Nullable OnItemClickListener onClickListener) {
         this.articles = articles;
         this.onClickListener = onClickListener;
@@ -71,6 +78,24 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     }
 
     private static class ViewHolderEven extends ViewHolder {
+
+        @Nullable
+        protected final TextView source;
+
+        @Nullable
+        protected final TextView author;
+
+        @Nullable
+        protected final TextView title;
+
+        @Nullable
+        protected final TextView preview;
+
+        @Nullable
+        protected final TextView published;
+
+        @Nullable
+        protected final ImageView image;
 
         @NonNull
         private static ViewHolder create(@NonNull ViewGroup parent) {
@@ -122,12 +147,13 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                         view -> onItemClickListener.onItemClick(itemView, article));
             }
         }
+    }
+
+    private static class ViewHolderOdd extends ViewHolder {
+
 
         @Nullable
         protected final TextView source;
-
-        @Nullable
-        protected final TextView author;
 
         @Nullable
         protected final TextView title;
@@ -140,9 +166,6 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
         @Nullable
         protected final ImageView image;
-    }
-
-    private static class ViewHolderOdd extends ViewHolder {
 
         @NonNull
         private static ViewHolder create(@NonNull ViewGroup parent) {
@@ -193,29 +216,5 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                         view -> onItemClickListener.onItemClick(itemView, article));
             }
         }
-
-        @Nullable
-        protected final TextView source;
-
-        @Nullable
-        protected final TextView title;
-
-        @Nullable
-        protected final TextView preview;
-
-        @Nullable
-        protected final TextView published;
-
-        @Nullable
-        protected final ImageView image;
     }
-
-    @NonNull
-    private final IDateConverter dateConverter;
-
-    @NonNull
-    private final List<Article> articles;
-
-    @Nullable
-    private final OnItemClickListener onClickListener;
 }

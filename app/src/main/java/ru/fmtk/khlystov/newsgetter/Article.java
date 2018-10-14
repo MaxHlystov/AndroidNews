@@ -10,6 +10,30 @@ import java.util.Objects;
 
 public class Article implements Parcelable {
 
+    @Nullable
+    private final Source source;
+
+    @Nullable
+    private final String author;
+
+    @Nullable
+    private final String title;
+
+    @Nullable
+    private final String description;
+
+    @Nullable
+    private final String content;
+
+    @Nullable
+    private final String url;
+
+    @Nullable
+    private final String urlToImage;
+
+    @Nullable
+    private final Date publishedAt;
+
     public Article(@Nullable Source source,
                    @Nullable String author,
                    @Nullable String title,
@@ -92,8 +116,12 @@ public class Article implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Article article = (Article) o;
         return Objects.equals(getAuthor(), article.getAuthor()) &&
                 Objects.equals(getTitle(), article.getTitle()) &&
@@ -134,28 +162,4 @@ public class Article implements Parcelable {
             return new Article[size];
         }
     };
-
-    @Nullable
-    private final Source source;
-
-    @Nullable
-    private final String author;
-
-    @Nullable
-    private final String title;
-
-    @Nullable
-    private final String description;
-
-    @Nullable
-    private final String content;
-
-    @Nullable
-    private final String url;
-
-    @Nullable
-    private final String urlToImage;
-
-    @Nullable
-    private final Date publishedAt;
 }
