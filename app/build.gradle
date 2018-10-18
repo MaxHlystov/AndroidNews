@@ -24,7 +24,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation libraries.supportAppCompat
     implementation libraries.supportCoreUtils
     implementation libraries.supportDesign
@@ -38,7 +37,7 @@ dependencies {
 
     // It doesn't work
     // implementation libraries.cardViewV7
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation "com.android.support:cardview-v7:$versions.supportLibs"
 
     implementation project(':imagedlistitem')
 }
