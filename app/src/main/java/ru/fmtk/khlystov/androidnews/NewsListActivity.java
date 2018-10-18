@@ -1,7 +1,5 @@
 package ru.fmtk.khlystov.androidnews;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,7 +49,7 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news);
+        MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news_item);
         if (getOnlineNewsMenuItem != null) {
             getOnlineNewsMenuItem.setChecked(configuration.isGetOnlineNews());
         }
@@ -62,16 +60,10 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu__about_item:
-                AboutActivity.startActivity(this);
+                onMainMenuAboutItemClicked(item);
                 break;
-            case R.id.main_menu__get_online_news:
-                configuration.setGetOnlineNews(!item.isChecked());
-                item.setChecked(configuration.isGetOnlineNews());
-                if (disposableNewsGetter != null) {
-                    disposableNewsGetter.dispose();
-                }
-                saveConiguration();
-                updateNews();
+            case R.id.main_menu__get_online_news_item:
+                onMainMenuGetOnlineNewsItemClicked(item);
                 break;
             default:
                 Log.e("NewsApp", String.format("Unexpected option: %s", item.getTitle()));
@@ -86,6 +78,20 @@ public class NewsListActivity extends AppCompatActivity {
             disposableNewsGetter.dispose();
         }
         super.onDestroy();
+    }
+
+    private void onMainMenuAboutItemClicked(@NonNull MenuItem item) {
+        AboutActivity.startActivity(this);
+    }
+
+    private void onMainMenuGetOnlineNewsItemClicked(@NonNull MenuItem item) {
+        configuration.setGetOnlineNews(!item.isChecked());
+        item.setChecked(configuration.isGetOnlineNews());
+        if (disposableNewsGetter != null) {
+            disposableNewsGetter.dispose();
+        }
+        saveConiguration();
+        updateNews();
     }
 
     private void saveConiguration() {

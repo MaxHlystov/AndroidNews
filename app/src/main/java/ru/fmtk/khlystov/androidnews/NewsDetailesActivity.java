@@ -27,14 +27,14 @@ import static android.text.TextUtils.isEmpty;
 
 public class NewsDetailesActivity extends AppCompatActivity {
 
-    @Nullable
-    private Article article = null;
-
     @NonNull
     private static final String ARTICLE_OBJECT = "NewsDetailesActivity_ARTICLE_OBJECT";
 
     @NonNull
     private static final String simpleString = "0123456789";
+
+    @Nullable
+    private Article article = null;
 
     public static void startActivity(@NonNull Context parent, @NonNull Article article) {
         Intent intent = new Intent(parent, NewsDetailesActivity.class);
@@ -86,6 +86,12 @@ public class NewsDetailesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     private void goToArticleLink() {
         if (article != null) {
             String url = article.getUrl();
@@ -96,12 +102,6 @@ public class NewsDetailesActivity extends AppCompatActivity {
                         getString(R.string.no_browser_error));
             }
         }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
     }
 
     private void fillContent() {
@@ -161,7 +161,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
         return dateConverter.convert(publishedAt);
     }
 
-
+    @Nullable
     private String inflateContent(@Nullable String content, int needLength) {
         String template = isEmpty(content) ? simpleString : content;
         if (template.length() < needLength) {
