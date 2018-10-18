@@ -30,7 +30,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Nullable
     private Disposable disposableNewsGetter = null;
 
-    @Nullable
+    @NonNull
     private AppConfig configuration;
 
     @Nullable
@@ -87,32 +87,38 @@ public class NewsListActivity extends AppCompatActivity {
     private void onMainMenuGetOnlineNewsItemClicked(@NonNull MenuItem item) {
         configuration.setGetOnlineNews(!item.isChecked());
         item.setChecked(configuration.isGetOnlineNews());
+        configuration.save(this);
         if (disposableNewsGetter != null) {
             disposableNewsGetter.dispose();
         }
-        saveConiguration();
         updateNews();
     }
 
-    private void saveConiguration() {
-        configuration.save(this);
-    }
-
     private void updateNews() {
-        if (progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
+        showProgress();
         NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), configuration.isGetOnlineNews());
         disposableNewsGetter = newsGetter.observeNews((@Nullable NewsResponse newsResponse) -> {
-                    if (progressBar != null) {
-                        progressBar.setVisibility(View.GONE);
+                    if (newsResponse != null) {
+                        hideProgress();
+                        setNewsAdapter(newsResponse.getArticles());
                     }
-                    setNewsAdapter(newsResponse != null ? newsResponse.getArticles() : null);
                 },
                 throwable -> Log.d("NewsApp", "Error in news getting", throwable));
     }
 
-    private void setNewsAdapter(@NonNull List<Article> articlesList) {
+    private void hideProgress() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void showProgress() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setNewsAdapter(@Nullable List<Article> articlesList) {
         RecyclerView recyclerView = findViewById(R.id.activity_news_list__rec_view);
         if (articlesList != null) {
             recyclerView.setAdapter(

@@ -1,6 +1,7 @@
 package ru.fmtk.khlystov.androidnews.fashionutils;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -41,7 +42,12 @@ public class NYTDateConverter implements IDateConverter {
     public NYTDateConverter(@NonNull Context context) {
         is24HourFormat = android.text.format.DateFormat.is24HourFormat(context);
         dateFormat = android.text.format.DateFormat.getDateFormat(context);
-        currentLocale = context.getResources().getConfiguration().locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            currentLocale = context.getResources().getConfiguration().getLocales().get(0);
+        }
+        else {
+            currentLocale = context.getResources().getConfiguration().locale;
+        }
         justNowFormat = context.getString(R.string.nyt_data_converter__just_now_format);
         anHourFormat = context.getString(R.string.nyt_data_converter__an_hour_format);
         someHoursFormat = context.getString(R.string.nyt_data_converter__some_hours_format);

@@ -18,7 +18,6 @@
     <dimen name="activity_news_detailes_layout__author_text_size">14sp</dimen>
     <dimen name="activity_news_detailes_layout__date_text_size">8sp</dimen>
     <dimen name="activity_news_detailes_layout__content_text_size">10sp</dimen>
-    <dimen name="activity_news_detailes_layout__image_size">200dp</dimen>
     <dimen name="activity_news_detailes_layout__published_at_margin_top">12dp</dimen>
     <dimen name="news_item_layout__source_text_size">16sp</dimen>
     <dimen name="activity_news_detailes_layout__left_column_padding">12dp</dimen>

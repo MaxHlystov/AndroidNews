@@ -3,7 +3,6 @@ package ru.fmtk.khlystov.appconfig;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 public class AppConfig {
 
@@ -14,7 +13,7 @@ public class AppConfig {
 
     private boolean getOnlineNews = true;
 
-    public AppConfig(Context context) {
+    public AppConfig(@NonNull Context context) {
         restore(context);
     }
 
