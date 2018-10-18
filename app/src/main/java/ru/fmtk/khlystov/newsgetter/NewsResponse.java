@@ -36,8 +36,12 @@ public class NewsResponse {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         NewsResponse that = (NewsResponse) o;
         return getTotalResults() == that.getTotalResults() &&
                 Objects.equals(getStatus(), that.getStatus()) &&
@@ -46,7 +50,6 @@ public class NewsResponse {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getStatus(), getTotalResults(), getArticles());
     }
 }

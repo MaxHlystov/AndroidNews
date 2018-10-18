@@ -7,15 +7,13 @@
 
     <ImageView
         android:id="@+id/layout_imaged_text__image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/key_icon_size"
+        android:layout_height="@dimen/key_icon_size"
+        android:layout_marginEnd="@dimen/half_margin"
+        android:contentDescription="@string/item_image_description"
         android:scaleType="fitCenter"
-        tools:layout_height="@dimen/key_icon_size"
-        tools:layout_marginEnd="@dimen/half_margin"
-        tools:layout_width="@dimen/key_icon_size"
-        tools:src="@tools:sample/avatars"
         tools:contentDescription="@tools:sample/lorem"
-        android:contentDescription="@string/item_image_description" />
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/layout_imaged_text__text"

@@ -9,6 +9,19 @@ import java.util.Objects;
 
 public class Source implements Parcelable {
 
+    @NonNull
+    public static final Creator<Source> CREATOR = new Creator<Source>() {
+        @Override
+        public Source createFromParcel(@NonNull Parcel in) {
+            return new Source(in);
+        }
+
+        @Override
+        public Source[] newArray(int size) {
+            return new Source[size];
+        }
+    };
+
     @Nullable
     private final String id;
 
@@ -23,19 +36,6 @@ public class Source implements Parcelable {
     protected Source(@NonNull Parcel in) {
         this(in.readString(), in.readString());
     }
-
-    @NonNull
-    public static final Creator<Source> CREATOR = new Creator<Source>() {
-        @Override
-        public Source createFromParcel(@NonNull Parcel in) {
-            return new Source(in);
-        }
-
-        @Override
-        public Source[] newArray(int size) {
-            return new Source[size];
-        }
-    };
 
     @Nullable
     public String getId() {

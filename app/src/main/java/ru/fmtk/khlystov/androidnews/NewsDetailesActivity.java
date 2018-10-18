@@ -1,6 +1,6 @@
 package ru.fmtk.khlystov.androidnews;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +18,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Date;
 
 import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
-import ru.fmtk.khlystov.androidnews.fashionutils.NYTDateConverter;
+import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.newsgetter.Article;
-import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntent;
+import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntentProvider;
 import ru.fmtk.khlystov.thirdpartyintentutils.IntentUtils;
 
 import static android.text.TextUtils.isEmpty;
@@ -36,7 +36,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
     @NonNull
     private static final String simpleString = "0123456789";
 
-    public static void startActivity(@NonNull Activity parent, @NonNull Article article) {
+    public static void startActivity(@NonNull Context parent, @NonNull Article article) {
         Intent intent = new Intent(parent, NewsDetailesActivity.class);
         intent.putExtra(ARTICLE_OBJECT, article);
         parent.startActivity(intent);
@@ -87,12 +87,12 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     private void goToArticleLink() {
-        if(article != null) {
+        if (article != null) {
             String url = article.getUrl();
             if (url != null) {
                 IntentUtils.showIntent(this,
                         findViewById(R.id.activity_news_detailes_layout__content),
-                        BrowserIntent.get(url),
+                        BrowserIntentProvider.get(url),
                         getString(R.string.no_browser_error));
             }
         }
@@ -157,7 +157,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
 
     @NonNull
     private String dateToString(Date publishedAt) {
-        IDateConverter dateConverter = new NYTDateConverter(getApplicationContext());
+        IDateConverter dateConverter = new STDDateConverter(getApplicationContext());
         return dateConverter.convert(publishedAt);
     }
 

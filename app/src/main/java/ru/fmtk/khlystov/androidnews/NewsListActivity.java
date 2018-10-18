@@ -21,29 +21,29 @@ import android.widget.ProgressBar;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
-import ru.fmtk.khlystov.androidnews.fashionutils.NYTDateConverter;
+import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
+import ru.fmtk.khlystov.appconfig.AppConfig;
 import ru.fmtk.khlystov.newsgetter.Article;
 import ru.fmtk.khlystov.newsgetter.NewsGetter;
 import ru.fmtk.khlystov.newsgetter.NewsResponse;
 
 public class NewsListActivity extends AppCompatActivity {
 
-    @NonNull
-    private static final String ALTERNATIVE_CONFIG = "NewsListActivity_AltConfig";
-    @NonNull
-    private static final String CONFIG_GET_ONLINE_NEWS = "NewsListActivity_GetOnlineNews";
-
     @Nullable
     private Disposable disposableNewsGetter = null;
 
-    private boolean getOnlineNews;
+    @Nullable
+    private AppConfig configuration;
+
+    @Nullable
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-        SharedPreferences shp = getSharedPreferences(ALTERNATIVE_CONFIG, Context.MODE_PRIVATE);
-        getOnlineNews = shp.getBoolean(CONFIG_GET_ONLINE_NEWS, true);
+        progressBar = findViewById(R.id.activity_news_list__progress_bar);
+        configuration = new AppConfig(this);
         updateNews();
     }
 
@@ -53,7 +53,7 @@ public class NewsListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news);
         if (getOnlineNewsMenuItem != null) {
-            getOnlineNewsMenuItem.setChecked(getOnlineNews);
+            getOnlineNewsMenuItem.setChecked(configuration.isGetOnlineNews());
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -65,8 +65,8 @@ public class NewsListActivity extends AppCompatActivity {
                 AboutActivity.startActivity(this);
                 break;
             case R.id.main_menu__get_online_news:
-                getOnlineNews = !item.isChecked();
-                item.setChecked(getOnlineNews);
+                configuration.setGetOnlineNews(!item.isChecked());
+                item.setChecked(configuration.isGetOnlineNews());
                 if (disposableNewsGetter != null) {
                     disposableNewsGetter.dispose();
                 }
@@ -75,6 +75,7 @@ public class NewsListActivity extends AppCompatActivity {
                 break;
             default:
                 Log.e("NewsApp", String.format("Unexpected option: %s", item.getTitle()));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -88,41 +89,42 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void saveConiguration() {
-        SharedPreferences.Editor shp = getSharedPreferences(ALTERNATIVE_CONFIG,
-                Context.MODE_PRIVATE).edit();
-        shp.putBoolean(CONFIG_GET_ONLINE_NEWS, getOnlineNews);
-        shp.apply();
+        configuration.save(this);
     }
 
     private void updateNews() {
-        ProgressBar progressBar = findViewById(R.id.activity_news_list__progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-        NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), getOnlineNews);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), configuration.isGetOnlineNews());
         disposableNewsGetter = newsGetter.observeNews((@Nullable NewsResponse newsResponse) -> {
-                    progressBar.setVisibility(View.GONE);
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
                     setNewsAdapter(newsResponse != null ? newsResponse.getArticles() : null);
                 },
                 throwable -> Log.d("NewsApp", "Error in news getting", throwable));
     }
 
-    private void setNewsAdapter(List<Article> articlesList) {
+    private void setNewsAdapter(@NonNull List<Article> articlesList) {
         RecyclerView recyclerView = findViewById(R.id.activity_news_list__rec_view);
         if (articlesList != null) {
             recyclerView.setAdapter(
                     new NewsRecyclerAdapter(articlesList,
-                            new NYTDateConverter(getApplicationContext()),
+                            new STDDateConverter(getApplicationContext()),
                             this::onNewsItemClickHandler));
-            recyclerView.setLayoutManager(getLayoutManager(getOrientation()));
+            recyclerView.setLayoutManager(getLayoutManager());
             recyclerView.addItemDecoration(new SpaceItemDecoration(
                     getResources().getDimensionPixelSize(
                             R.dimen.activity_news_list__space_between_items)));
         } else {
-            Snackbar.make(recyclerView, "dfg", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(recyclerView, R.string.news_list_activity__adapter_set_error, Snackbar.LENGTH_LONG).show();
         }
     }
 
-    private RecyclerView.LayoutManager getLayoutManager(int orientation) {
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    @NonNull
+    private RecyclerView.LayoutManager getLayoutManager() {
+        if (isHorizontalOrientation()) {
             return new GridLayoutManager(this, 2);
         }
         return new LinearLayoutManager(this);
@@ -130,6 +132,10 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void onNewsItemClickHandler(@NonNull View view, @NonNull Article article) {
         NewsDetailesActivity.startActivity(this, article);
+    }
+
+    private boolean isHorizontalOrientation() {
+        return getOrientation() == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private int getOrientation() {

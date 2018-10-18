@@ -10,6 +10,19 @@ import java.util.Objects;
 
 public class Article implements Parcelable {
 
+    @NonNull
+    public static final Parcelable.Creator<Article> CREATOR = new Parcelable.Creator<Article>() {
+        @Override
+        public Article createFromParcel(@NonNull Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
+
     @Nullable
     private final Source source;
 
@@ -66,48 +79,48 @@ public class Article implements Parcelable {
         publishedAt = tmpPublishedAt != -1 ? new Date(tmpPublishedAt) : null;
     }
 
-    public @Nullable
-    Source getSource() {
+    @Nullable
+    public Source getSource() {
         return source;
     }
 
-    public @Nullable
-    String getAuthor() {
+    @Nullable
+    public String getAuthor() {
         return author;
     }
 
-    public @Nullable
-    String getTitle() {
+    @Nullable
+    public String getTitle() {
         return title;
     }
 
-    public @Nullable
-    String getDescription() {
+    @Nullable
+    public String getDescription() {
         return description;
     }
 
-    public @Nullable
-    String getContent() {
+    @Nullable
+    public String getContent() {
         return content;
     }
 
-    public @Nullable
-    String getUrl() {
+    @Nullable
+    public String getUrl() {
         return url;
     }
 
-    public @Nullable
-    String getUrlToImage() {
+    @Nullable
+    public String getUrlToImage() {
         return urlToImage;
     }
 
-    public @Nullable
-    Date getPublishedAt() {
+    @Nullable
+    public Date getPublishedAt() {
         return publishedAt;
     }
 
-    public @Nullable
-    String getSourceName() {
+    @Nullable
+    public String getSourceName() {
         if (source != null) {
             return source.getName();
         }
@@ -149,17 +162,4 @@ public class Article implements Parcelable {
         dest.writeString(urlToImage);
         dest.writeLong(publishedAt != null ? publishedAt.getTime() : -1L);
     }
-
-    @NonNull
-    public static final Parcelable.Creator<Article> CREATOR = new Parcelable.Creator<Article>() {
-        @Override
-        public Article createFromParcel(@NonNull Parcel in) {
-            return new Article(in);
-        }
-
-        @Override
-        public Article[] newArray(int size) {
-            return new Article[size];
-        }
-    };
 }

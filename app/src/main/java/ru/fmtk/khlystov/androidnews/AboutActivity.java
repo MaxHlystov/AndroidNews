@@ -1,6 +1,7 @@
 package ru.fmtk.khlystov.androidnews;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,14 +14,14 @@ import android.widget.Button;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntent;
+import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntentProvider;
 import ru.fmtk.khlystov.thirdpartyintentutils.IntentUtils;
-import ru.fmtk.khlystov.thirdpartyintentutils.MailIntent;
+import ru.fmtk.khlystov.thirdpartyintentutils.MailIntentProvider;
 import ru.fmtkl.hlystov.imagedlistitem.ImagedTextView;
 
 public class AboutActivity extends AppCompatActivity {
 
-    public static void startActivity(@NonNull Activity parent) {
+    public static void startActivity(@NonNull Context parent) {
         Intent intent = new Intent(parent, AboutActivity.class);
         parent.startActivity(intent);
     }
@@ -54,7 +55,7 @@ public class AboutActivity extends AppCompatActivity {
                 socialLinkOnClickHandler(view, config.getURLStepik()));
 
         btnSendMail.setOnClickListener((View view) -> {
-            Intent intent = MailIntent.get(config.getMyEmail(),
+            Intent intent = MailIntentProvider.get(config.getMyEmail(),
                     getString(R.string.greeting),
                     tvMsg.getText().toString());
             IntentUtils.showIntent(this, view, intent, getString(R.string.no_email));
@@ -93,7 +94,7 @@ public class AboutActivity extends AppCompatActivity {
     private void socialLinkOnClickHandler(@NonNull View parent, @NonNull SocialNetwork link) {
         IntentUtils.showIntent(this,
                 parent,
-                BrowserIntent.get(link.getUrl()),
+                BrowserIntentProvider.get(link.getUrl()),
                 getString(R.string.no_browser_error));
     }
 
