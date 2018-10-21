@@ -80,22 +80,22 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     private static class ViewHolderEven extends ViewHolder {
 
         @Nullable
-        protected final TextView source;
+        private final TextView source;
 
         @Nullable
-        protected final TextView author;
+        private final TextView author;
 
         @Nullable
-        protected final TextView title;
+        private final TextView title;
 
         @Nullable
-        protected final TextView preview;
+        private final TextView preview;
 
         @Nullable
-        protected final TextView published;
+        private final TextView published;
 
         @Nullable
-        protected final ImageView image;
+        private final ImageView image;
 
         @NonNull
         private static ViewHolder create(@NonNull ViewGroup parent) {
@@ -151,21 +151,20 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     private static class ViewHolderOdd extends ViewHolder {
 
+        @NonNull
+        private final TextView source;
 
-        @Nullable
-        protected final TextView source;
+        @NonNull
+        private final TextView title;
 
-        @Nullable
-        protected final TextView title;
+        @NonNull
+        private final TextView preview;
 
-        @Nullable
-        protected final TextView preview;
+        @NonNull
+        private final TextView published;
 
-        @Nullable
-        protected final TextView published;
-
-        @Nullable
-        protected final ImageView image;
+        @NonNull
+        private final ImageView image;
 
         @NonNull
         private static ViewHolder create(@NonNull ViewGroup parent) {
@@ -187,29 +186,21 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                             @Nullable OnItemClickListener onItemClickListener,
                             @Nullable IDateConverter dateConverter) {
             String sourceName = article.getSourceName();
-            if (source != null) {
-                source.setText(isEmpty(sourceName) ?
-                        source.getContext().getString(R.string.news_recycler_adapter__source_undefined) :
-                        sourceName);
-            }
+            source.setText(isEmpty(sourceName) ?
+                    source.getContext().getString(R.string.news_recycler_adapter__source_undefined) :
+                    sourceName);
 
-            if (title != null) {
-                title.setText(article.getTitle());
-            }
-            if (preview != null) {
-                preview.setText(article.getDescription());
-            }
-            if (published != null && dateConverter != null) {
+            title.setText(article.getTitle());
+            preview.setText(article.getDescription());
+            if (dateConverter != null) {
                 Date publishedAt = article.getPublishedAt();
                 published.setText(dateConverter.convert(publishedAt));
             }
-            if (image != null) {
-                if (isEmpty(article.getUrlToImage())) {
-                    image.setVisibility(View.GONE);
-                } else {
-                    image.setVisibility(View.VISIBLE);
-                    Picasso.get().load(article.getUrlToImage()).into(image);
-                }
+            if (isEmpty(article.getUrlToImage())) {
+                image.setVisibility(View.GONE);
+            } else {
+                image.setVisibility(View.VISIBLE);
+                Picasso.get().load(article.getUrlToImage()).into(image);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(

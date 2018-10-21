@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -107,18 +108,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
     private void fillContent() {
         if (article != null) {
             String urlToImage = article.getUrlToImage();
-            String title = article.getTitle();
-            String source = article.getSourceName();
-            String author = article.getAuthor();
-            Date publishedAt = article.getPublishedAt();
-            String content = inflateContent(article.getContent(), 4500);
-
             ImageView imageView = findViewById(R.id.activity_news_detailes_layout__image);
-            TextView authorTextView = findViewById(R.id.activity_news_detailes_layout__author);
-            TextView titleTextView = findViewById(R.id.activity_news_detailes_layout__title);
-            TextView publishedAtTextView = findViewById(R.id.activity_news_detailes_layout__published);
-            TextView contentTextView = findViewById(R.id.activity_news_detailes_layout__content);
-
             if (imageView != null) {
                 if (isEmpty(urlToImage)) {
                     imageView.setVisibility(View.GONE);
@@ -128,24 +118,35 @@ public class NewsDetailesActivity extends AppCompatActivity {
                 }
             }
 
+            String source = article.getSourceName();
+            TextView authorTextView = findViewById(R.id.activity_news_detailes_layout__author);
             if (!isEmpty(source)) {
-                android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+                ActionBar actionBar = getSupportActionBar();
                 if (actionBar != null) {
                     actionBar.setTitle(source);
                 }
             }
 
+            String author = article.getAuthor();
             if (authorTextView != null) {
                 authorTextView.setText(author);
             }
 
+            String title = article.getTitle();
+            TextView titleTextView = findViewById(R.id.activity_news_detailes_layout__title);
             if (titleTextView != null) {
                 titleTextView.setText(title);
             }
+
+            Date publishedAt = article.getPublishedAt();
+            TextView publishedAtTextView = findViewById(R.id.activity_news_detailes_layout__published);
             if (publishedAtTextView != null) {
                 publishedAtTextView.setText(dateToString(publishedAt));
             }
 
+            final int TEMPORARY_MAX_ARTICLE_LENGTH = 4500;
+            String content = inflateContent(article.getContent(), TEMPORARY_MAX_ARTICLE_LENGTH);
+            TextView contentTextView = findViewById(R.id.activity_news_detailes_layout__content);
             if (!isEmpty(content)) {
                 contentTextView.setVisibility(View.VISIBLE);
                 contentTextView.setText(content);

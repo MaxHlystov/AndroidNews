@@ -27,7 +27,7 @@ ext.libraries = [
         gson            : "com.google.code.gson:gson:$versions.gson",
         rxJava          : "io.reactivex.rxjava2:rxjava:$versions.rxJava",
         rxAndroid       : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
-        recyclerView    : 'com.android.support:recyclerview-v7:$versions.supportLibs',
-        cardView      : 'com.android.support:cardview-v7:$versions.supportLibs',
+        recyclerView    : "com.android.support:recyclerview-v7:$versions.supportLibs",
+        cardView        : "com.android.support:cardview-v7:$versions.supportLibs",
         picasso         : "com.squareup.picasso:picasso:$versions.picasso"
 ]

@@ -9,12 +9,21 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import ru.fmtk.khlystov.androidnews.ContextUtils;
 import ru.fmtk.khlystov.androidnews.R;
 
 import static android.text.TextUtils.isEmpty;
+import static android.text.format.DateFormat.is24HourFormat;
 
 public class NYTDateConverter implements IDateConverter {
+
+    private static final long FIVE_MINUTES_IN_MILLS = TimeUnit.MINUTES.toMillis(5L);
+    private static final long AN_HOUR_IN_MILLS = TimeUnit.HOURS.toMillis(1L);
+    private static final long DAY_NIGHT_IN_MILLS = TimeUnit.DAYS.toMillis(1L);
+    private static final long TWO_DAY_NIGHT_IN_MILLS = 2L * DAY_NIGHT_IN_MILLS;
+    private static final long MIN_MONTH_IN_MILLS = 29L * DAY_NIGHT_IN_MILLS;
 
     private final boolean is24HourFormat;
 
@@ -40,14 +49,9 @@ public class NYTDateConverter implements IDateConverter {
     private final String dayOfMonthFormat;
 
     public NYTDateConverter(@NonNull Context context) {
-        is24HourFormat = android.text.format.DateFormat.is24HourFormat(context);
+        is24HourFormat = is24HourFormat(context);
         dateFormat = android.text.format.DateFormat.getDateFormat(context);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            currentLocale = context.getResources().getConfiguration().getLocales().get(0);
-        }
-        else {
-            currentLocale = context.getResources().getConfiguration().locale;
-        }
+        currentLocale = ContextUtils.getCurrentLocale(context);
         justNowFormat = context.getString(R.string.nyt_data_converter__just_now_format);
         anHourFormat = context.getString(R.string.nyt_data_converter__an_hour_format);
         someHoursFormat = context.getString(R.string.nyt_data_converter__some_hours_format);
@@ -70,18 +74,18 @@ public class NYTDateConverter implements IDateConverter {
         long nowLong = now.getTime();
         long dateLong = date.getTime();
         // it may be the date of a publication in future, just for fun
-        long duration = Math.abs(nowLong - dateLong);
+        long duration_ms = Math.abs(nowLong - dateLong);
         String timeString = " " + convertByFormat(date, getTimeFormat());
-        if (duration < 5L * 60L * 1000L) {
+        if (duration_ms < FIVE_MINUTES_IN_MILLS) {
             return String.format(justNowFormat, timeString);
-        } else if (duration <= 60L * 60L * 1000L) {
+        } else if (duration_ms <= AN_HOUR_IN_MILLS) {
             return String.format(anHourFormat, timeString);
-        } else if (duration < 24L * 60L * 60L * 1000L) {
-            long hoursAgo = duration / 1000L / 60L / 60L;
+        } else if (duration_ms < DAY_NIGHT_IN_MILLS) {
+            long hoursAgo = duration_ms / AN_HOUR_IN_MILLS;
             return String.format(someHoursFormat, hoursAgo, timeString);
-        } else if (duration < 48L * 60L * 60L * 1000L) {
+        } else if (duration_ms < TWO_DAY_NIGHT_IN_MILLS) {
             return String.format(yesterdayFormat, timeString);
-        } else if (duration < 29L * 24L * 60L * 60L * 1000L) {
+        } else if (duration_ms < MIN_MONTH_IN_MILLS) {
             return String.format(dayOfMonthFormat, timeString);
         }
         return dateFormat.format(date);

@@ -25,6 +25,8 @@ import ru.fmtk.khlystov.newsgetter.Article;
 import ru.fmtk.khlystov.newsgetter.NewsGetter;
 import ru.fmtk.khlystov.newsgetter.NewsResponse;
 
+import static ru.fmtk.khlystov.androidnews.ContextUtils.isHorizontalOrientation;
+
 public class NewsListActivity extends AppCompatActivity {
 
     @Nullable
@@ -51,7 +53,7 @@ public class NewsListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news_item);
         if (getOnlineNewsMenuItem != null) {
-            getOnlineNewsMenuItem.setChecked(configuration.isGetOnlineNews());
+            getOnlineNewsMenuItem.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -85,9 +87,9 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void onMainMenuGetOnlineNewsItemClicked(@NonNull MenuItem item) {
-        configuration.setGetOnlineNews(!item.isChecked());
-        item.setChecked(configuration.isGetOnlineNews());
-        configuration.save(this);
+        configuration.setNeedFetchNewsFromOnlineFlag(!item.isChecked());
+        item.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
+        configuration.save();
         if (disposableNewsGetter != null) {
             disposableNewsGetter.dispose();
         }
@@ -96,7 +98,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void updateNews() {
         showProgress();
-        NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), configuration.isGetOnlineNews());
+        NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), configuration.isNeedFetchNewsFromOnlineFlag());
         disposableNewsGetter = newsGetter.observeNews((@Nullable NewsResponse newsResponse) -> {
                     if (newsResponse != null) {
                         hideProgress();
@@ -136,7 +138,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     @NonNull
     private RecyclerView.LayoutManager getLayoutManager() {
-        if (isHorizontalOrientation()) {
+        if (isHorizontalOrientation(this)) {
             return new GridLayoutManager(this, 2);
         }
         return new LinearLayoutManager(this);
@@ -144,13 +146,5 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void onNewsItemClickHandler(@NonNull View view, @NonNull Article article) {
         NewsDetailesActivity.startActivity(this, article);
-    }
-
-    private boolean isHorizontalOrientation() {
-        return getOrientation() == Configuration.ORIENTATION_LANDSCAPE;
-    }
-
-    private int getOrientation() {
-        return getResources().getConfiguration().orientation;
     }
 }
