@@ -79,22 +79,22 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     private static class ViewHolderEven extends ViewHolder {
 
-        @Nullable
+        @NonNull
         private final TextView source;
 
-        @Nullable
+        @NonNull
         private final TextView author;
 
-        @Nullable
+        @NonNull
         private final TextView title;
 
-        @Nullable
+        @NonNull
         private final TextView preview;
 
-        @Nullable
+        @NonNull
         private final TextView published;
 
-        @Nullable
+        @NonNull
         private final ImageView image;
 
         @NonNull
@@ -119,28 +119,22 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                             @Nullable OnItemClickListener onItemClickListener,
                             @Nullable IDateConverter dateConverter) {
             String sourceName = article.getSourceName();
-            if (!isEmpty(sourceName) && source != null) {
+            if (!isEmpty(sourceName)) {
                 source.setText(sourceName);
-            } else if (author != null) {
+            } else {
                 author.setText(article.getAuthor());
             }
-            if (title != null) {
-                title.setText(article.getTitle());
-            }
-            if (preview != null) {
-                preview.setText(article.getDescription());
-            }
-            if (published != null && dateConverter != null) {
+            title.setText(article.getTitle());
+            preview.setText(article.getDescription());
+            if (dateConverter != null) {
                 Date publishedAt = article.getPublishedAt();
                 published.setText(dateConverter.convert(publishedAt));
             }
-            if (image != null) {
-                if (isEmpty(article.getUrlToImage())) {
-                    image.setVisibility(View.GONE);
-                } else {
-                    image.setVisibility(View.VISIBLE);
-                    Picasso.get().load(article.getUrlToImage()).into(image);
-                }
+            if (isEmpty(article.getUrlToImage())) {
+                image.setVisibility(View.GONE);
+            } else {
+                image.setVisibility(View.VISIBLE);
+                Picasso.get().load(article.getUrlToImage()).into(image);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(
