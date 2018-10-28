@@ -9,6 +9,8 @@ android {
         versionCode versions.code
         versionName versions.name
         buildConfigField 'String', 'APIkey', '"c2180bbd7b7b43629b28cb8a8438bbe4"'
+        buildConfigField 'String', 'NYT_APIkey', '"eeb4255a249346bb9ced15d12a3a5c74"'
+
     }
     buildTypes {
         release {

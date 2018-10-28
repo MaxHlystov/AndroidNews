@@ -21,8 +21,7 @@ import java.util.Date;
 import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
 import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.newsgetter.Article;
-import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntentProvider;
-import ru.fmtk.khlystov.thirdpartyintentutils.IntentUtils;
+import ru.fmtk.khlystov.utils.IntentUtils;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -33,6 +32,8 @@ public class NewsDetailesActivity extends AppCompatActivity {
 
     @NonNull
     private static final String simpleString = "0123456789";
+
+    private static final int TEMPORARY_MAX_ARTICLE_LENGTH = 4500;
 
     @Nullable
     private Article article = null;
@@ -99,7 +100,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
             if (url != null) {
                 IntentUtils.showIntent(this,
                         findViewById(R.id.activity_news_detailes_layout__content),
-                        BrowserIntentProvider.get(url),
+                        IntentUtils.getBrowserIntent(url),
                         getString(R.string.no_browser_error));
             }
         }
@@ -144,7 +145,6 @@ public class NewsDetailesActivity extends AppCompatActivity {
                 publishedAtTextView.setText(dateToString(publishedAt));
             }
 
-            final int TEMPORARY_MAX_ARTICLE_LENGTH = 4500;
             String content = inflateContent(article.getContent(), TEMPORARY_MAX_ARTICLE_LENGTH);
             TextView contentTextView = findViewById(R.id.activity_news_detailes_layout__content);
             if (!isEmpty(content)) {

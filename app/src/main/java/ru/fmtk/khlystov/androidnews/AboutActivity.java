@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.fmtk.khlystov.thirdpartyintentutils.BrowserIntentProvider;
-import ru.fmtk.khlystov.thirdpartyintentutils.IntentUtils;
-import ru.fmtk.khlystov.thirdpartyintentutils.MailIntentProvider;
+import ru.fmtk.khlystov.utils.IntentUtils;
 import ru.fmtkl.hlystov.imagedlistitem.ImagedTextView;
 
 public class AboutActivity extends AppCompatActivity {
@@ -55,7 +53,7 @@ public class AboutActivity extends AppCompatActivity {
                 socialLinkOnClickHandler(view, config.getURLStepik()));
 
         btnSendMail.setOnClickListener((View view) -> {
-            Intent intent = MailIntentProvider.get(config.getMyEmail(),
+            Intent intent = IntentUtils.getMailIntent(config.getMyEmail(),
                     getString(R.string.greeting),
                     tvMsg.getText().toString());
             IntentUtils.showIntent(this, view, intent, getString(R.string.no_email));
@@ -94,7 +92,7 @@ public class AboutActivity extends AppCompatActivity {
     private void socialLinkOnClickHandler(@NonNull View parent, @NonNull SocialNetwork link) {
         IntentUtils.showIntent(this,
                 parent,
-                BrowserIntentProvider.get(link.getUrl()),
+                IntentUtils.getBrowserIntent(link.getUrl()),
                 getString(R.string.no_browser_error));
     }
 

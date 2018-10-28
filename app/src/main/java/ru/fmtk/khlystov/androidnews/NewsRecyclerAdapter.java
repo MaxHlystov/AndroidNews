@@ -41,8 +41,10 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 0) {
-            return ViewHolderEven.create(parent);
+        if (viewType == R.layout.news_item_even_layout) {
+            return new ViewHolderEven(
+                    LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.news_item_even_layout, parent, false));
         }
         return ViewHolderOdd.create(parent);
     }
@@ -59,7 +61,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     @Override
     public int getItemViewType(int position) {
-        return position & 1;
+        return isOdd(position) ? R.layout.news_item_odd_layout : R.layout.news_item_even_layout;
+    }
+
+    private boolean isOdd(int value) {
+        return (value & 1) == 1;
     }
 
     public interface OnItemClickListener {
@@ -96,13 +102,6 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
         @NonNull
         private final ImageView image;
-
-        @NonNull
-        private static ViewHolder create(@NonNull ViewGroup parent) {
-            return new ViewHolderEven(
-                    LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.news_item_even_layout, parent, false));
-        }
 
         private ViewHolderEven(@NonNull View itemView) {
             super(itemView);
@@ -176,6 +175,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
             image = itemView.findViewById(R.id.news_item_layout__image);
         }
 
+        @Override
         protected void bind(@NonNull Article article,
                             @Nullable OnItemClickListener onItemClickListener,
                             @Nullable IDateConverter dateConverter) {

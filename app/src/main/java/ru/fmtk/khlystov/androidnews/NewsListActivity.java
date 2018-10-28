@@ -1,6 +1,5 @@
 package ru.fmtk.khlystov.androidnews;
 
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -28,6 +27,8 @@ import ru.fmtk.khlystov.newsgetter.NewsResponse;
 import static ru.fmtk.khlystov.androidnews.ContextUtils.isHorizontalOrientation;
 
 public class NewsListActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "NewsApp";
 
     @Nullable
     private Disposable disposableNewsGetter = null;
@@ -68,7 +69,7 @@ public class NewsListActivity extends AppCompatActivity {
                 onMainMenuGetOnlineNewsItemClicked(item);
                 break;
             default:
-                Log.e("NewsApp", String.format("Unexpected option: %s", item.getTitle()));
+                Log.e(LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -98,14 +99,19 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void updateNews() {
         showProgress();
-        NewsGetter newsGetter = new NewsGetter(getString(R.string.country_code), configuration.isNeedFetchNewsFromOnlineFlag());
+        NewsGetter newsGetter = new NewsGetter(this,
+                getString(R.string.country_code),
+                configuration.isNeedFetchNewsFromOnlineFlag());
         disposableNewsGetter = newsGetter.observeNews((@Nullable NewsResponse newsResponse) -> {
                     if (newsResponse != null) {
                         hideProgress();
                         setNewsAdapter(newsResponse.getArticles());
                     }
                 },
-                throwable -> Log.d("NewsApp", "Error in news getting", throwable));
+                throwable -> {
+                    Log.d(LOG_TAG, "Error in news getting", throwable);
+                    hideProgress();
+                });
     }
 
     private void hideProgress() {
@@ -126,7 +132,7 @@ public class NewsListActivity extends AppCompatActivity {
             recyclerView.setAdapter(
                     new NewsRecyclerAdapter(articlesList,
                             new STDDateConverter(getApplicationContext()),
-                            this::onNewsItemClickHandler));
+                            this::handleOnNewsItemClick));
             recyclerView.setLayoutManager(getLayoutManager());
             recyclerView.addItemDecoration(new SpaceItemDecoration(
                     getResources().getDimensionPixelSize(
@@ -144,7 +150,7 @@ public class NewsListActivity extends AppCompatActivity {
         return new LinearLayoutManager(this);
     }
 
-    private void onNewsItemClickHandler(@NonNull View view, @NonNull Article article) {
+    private void handleOnNewsItemClick(@NonNull View view, @NonNull Article article) {
         NewsDetailesActivity.startActivity(this, article);
     }
 }
