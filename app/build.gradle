@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion versions.compileSdk
     defaultConfig {
         applicationId "ru.fmtk.khlystov.androidnews"
-        minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.code
+        versionName versions.name
+        buildConfigField 'String', 'APIkey', '"c2180bbd7b7b43629b28cb8a8438bbe4"'
+        buildConfigField 'String', 'NYT_APIkey', '"eeb4255a249346bb9ced15d12a3a5c74"'
+
     }
     buildTypes {
         release {
@@ -23,7 +26,17 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.0'
+    implementation libraries.supportAppCompat
+    implementation libraries.supportCoreUtils
+    implementation libraries.supportDesign
+    implementation libraries.gson
+    implementation libraries.rxJava
+    implementation libraries.rxAndroid
+    implementation(libraries.picasso) {
+        exclude group: 'com.android.support'
+    }
+    implementation libraries.recyclerView
+    implementation libraries.cardView
+
     implementation project(':imagedlistitem')
 }

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static android.text.TextUtils.isEmpty;
+
 public class ImagedTextView extends LinearLayout {
 
     @Nullable
@@ -29,36 +31,33 @@ public class ImagedTextView extends LinearLayout {
 
     public ImagedTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleResource) {
         super(context, attrs, defStyleAttr, defStyleResource);
-        text = "";
         TypedArray typedArray = null;
         try {
+            text = "";
             typedArray = context.obtainStyledAttributes(
                     attrs,
-                    R.styleable.ImagedText,
+                    R.styleable.ImagedTextView,
                     defStyleAttr,
                     defStyleAttr);
-        } catch (Exception ex) {
+            if (typedArray != null) {
+                image = typedArray.getDrawable(R.styleable.ImagedTextView_src);
+                imageToTextMargin = typedArray.getDimensionPixelOffset(R.styleable.ImagedTextView_imageToTextMargin, 0);
+                text = typedArray.getString(R.styleable.ImagedTextView_text);
+                init();
+            }
+        } finally {
             if (typedArray != null) {
                 typedArray.recycle();
             }
         }
-        if (typedArray != null) {
-            try {
-                image = typedArray.getDrawable(R.styleable.ImagedText_src);
-                imageToTextMargin = typedArray.getDimensionPixelOffset(R.styleable.ImagedText_imageToTextMargin, 0);
-                text = typedArray.getString(R.styleable.ImagedText_text);
-            } finally {
-                typedArray.recycle();
-            }
-            init();
-        }
+
     }
 
     private void init() {
         View rootView = inflate(getContext(), R.layout.main_layout, this);
         TextView textView = rootView.findViewById(R.id.layout_imaged_text__text);
         textView.setText(text);
-        if (android.text.TextUtils.isEmpty(text)) {
+        if (isEmpty(text)) {
             textView.setVisibility(INVISIBLE);
         } else {
             textView.setVisibility(VISIBLE);
