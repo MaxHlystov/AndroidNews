@@ -12,7 +12,7 @@ public class AppConfig {
     private static final String PREF_ALTERNATIVE_CONFIG = "ru.fmtk.khlystov.appconfig.alt_config";
     @NonNull
     private static final String PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG =
-            "ru.fmtk.khlystov.appconfig.need_fetch_news_from_online_flag";
+            PREF_ALTERNATIVE_CONFIG + ".need_fetch_news_from_online_flag";
 
     @NonNull
     private WeakReference<SharedPreferences> sharedPreferencesWeakReference;
