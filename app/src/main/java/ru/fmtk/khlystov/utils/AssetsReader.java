@@ -28,7 +28,7 @@ public class AssetsReader {
                     .open(fileName, AssetManager.ACCESS_STREAMING);
             isr = new InputStreamReader(fIn);
             input = new BufferedReader(isr);
-            String line = "";
+            String line;
             while ((line = input.readLine()) != null) {
                 returnString.append(line);
             }

@@ -15,7 +15,7 @@ public class AppConfig {
             PREF_ALTERNATIVE_CONFIG + ".need_fetch_news_from_online_flag";
 
     @NonNull
-    private WeakReference<SharedPreferences> sharedPreferencesWeakReference;
+    private final WeakReference<SharedPreferences> sharedPreferencesWeakReference;
 
     private boolean needFetchNewsFromOnlineFlag = true;
 

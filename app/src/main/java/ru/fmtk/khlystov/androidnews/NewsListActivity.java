@@ -38,7 +38,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Nullable
     private Disposable disposableNewsGetter = null;
 
-    @NonNull
+    @Nullable
     private AppConfig configuration;
 
     @Nullable
@@ -60,7 +60,7 @@ public class NewsListActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem getOnlineNewsMenuItem = menu.findItem(R.id.main_menu__get_online_news_item);
-        if (getOnlineNewsMenuItem != null) {
+        if (getOnlineNewsMenuItem != null && configuration != null) {
             getOnlineNewsMenuItem.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
         }
         return super.onCreateOptionsMenu(menu);
@@ -95,9 +95,11 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void onMainMenuGetOnlineNewsItemClicked(@NonNull MenuItem item) {
-        configuration.setNeedFetchNewsFromOnlineFlag(!item.isChecked());
-        item.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
-        configuration.save();
+        if (configuration != null) {
+            configuration.setNeedFetchNewsFromOnlineFlag(!item.isChecked());
+            item.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
+            configuration.save();
+        }
         if (disposableNewsGetter != null) {
             disposableNewsGetter.dispose();
         }
@@ -105,20 +107,24 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void updateNews() {
-        showProgress();
-        Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(this,
-                getString(R.string.country_code),
-                configuration.isNeedFetchNewsFromOnlineFlag());
-        disposableNewsGetter = newsObserver.subscribe((@Nullable NewsResponse newsResponse) -> {
-                    if (newsResponse != null) {
-                        hideProgress();
-                        updateNewsInAdapter(newsResponse.getArticles());
-                    }
-                },
-                throwable -> {
-                    Log.d(LOG_TAG, "Error in news getting", throwable);
-                    hideProgress();
-                });
+        if (configuration != null) {
+            showProgress();
+            Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(this,
+                    getString(R.string.country_code),
+                    configuration.isNeedFetchNewsFromOnlineFlag());
+            if (newsObserver != null) {
+                disposableNewsGetter = newsObserver.subscribe((@Nullable NewsResponse newsResponse) -> {
+                            if (newsResponse != null) {
+                                hideProgress();
+                                updateNewsInAdapter(newsResponse.getArticles());
+                            }
+                        },
+                        throwable -> {
+                            Log.d(LOG_TAG, "Error in news getting", throwable);
+                            hideProgress();
+                        });
+            }
+        }
     }
 
     private void hideProgress() {
@@ -134,10 +140,10 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void updateNewsInAdapter(@Nullable List<Article> articlesList) {
-        if (articlesList != null) {
+        if (articlesList != null && recyclerView != null) {
             NewsRecyclerAdapter newsRecyclerAdapter = (NewsRecyclerAdapter) recyclerView.getAdapter();
             newsRecyclerAdapter.replaceData(articlesList);
-        } else {
+        } else if (recyclerView != null) {
             Snackbar.make(recyclerView, R.string.news_list_activity__adapter_set_error, Snackbar.LENGTH_LONG).show();
         }
     }
@@ -155,14 +161,16 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        recyclerView.setAdapter(
-                new NewsRecyclerAdapter(new ArrayList<Article>(),
-                        new STDDateConverter(getApplicationContext()),
-                        this::handleOnNewsItemClick));
-        recyclerView.setLayoutManager(getLayoutManager());
-        recyclerView.addItemDecoration(new SpaceItemDecoration(
-                getResources().getDimensionPixelSize(
-                        R.dimen.activity_news_list__space_between_items)));
+        if (recyclerView != null) {
+            recyclerView.setAdapter(
+                    new NewsRecyclerAdapter(new ArrayList<>(),
+                            new STDDateConverter(getApplicationContext()),
+                            this::handleOnNewsItemClick));
+            recyclerView.setLayoutManager(getLayoutManager());
+            recyclerView.addItemDecoration(new SpaceItemDecoration(
+                    getResources().getDimensionPixelSize(
+                            R.dimen.activity_news_list__space_between_items)));
+        }
     }
 
 }

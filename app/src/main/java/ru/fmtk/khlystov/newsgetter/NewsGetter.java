@@ -7,14 +7,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import ru.fmtk.khlystov.androidnews.BuildConfig;
 import ru.fmtk.khlystov.utils.AssetsReader;
@@ -24,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -37,7 +31,7 @@ public class NewsGetter {
     private static final int bufferSize = 8 * 1024;
     private static final String LOG_TAG = "NewsApp";
 
-    @NonNull
+    @Nullable
     private static String countryCode;
 
     private static boolean online;
@@ -54,7 +48,8 @@ public class NewsGetter {
                                                        @Nullable String countryCode,
                                                        boolean online) {
         if (newsObserver != null
-                && countryCode.equals(NewsGetter.countryCode)
+                && NewsGetter.countryCode != null
+                && NewsGetter.countryCode.equals(countryCode)
                 && NewsGetter.online == online) {
             return newsObserver;
         }
