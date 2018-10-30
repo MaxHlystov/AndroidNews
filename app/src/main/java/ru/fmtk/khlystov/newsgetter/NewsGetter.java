@@ -38,40 +38,45 @@ public class NewsGetter {
     private static final String LOG_TAG = "NewsApp";
 
     @NonNull
-    private WeakReference<Context> weakContext;
+    private static String countryCode;
 
-    @NonNull
-    private final String countryCode;
+    private static boolean online;
 
-    private final boolean online;
+    @Nullable
+    private static Single<NewsResponse> newsObserver = null;
 
-    public NewsGetter(@NonNull Context context, @Nullable String countryCode, boolean online) {
-        this.weakContext = new WeakReference<>(context);
-        this.countryCode = (countryCode != null) ? countryCode : "us";
-        this.online = online;
+    private NewsGetter() {
+        throw new IllegalAccessError("NewsGetter's constructor invocation.");
     }
 
-    public @Nullable
-    Disposable observeNews(@NonNull Consumer<? super NewsResponse> onProc,
-                           @NonNull Consumer<? super Throwable> onError) {
+    @Nullable
+    public static Single<NewsResponse> getNewsObserver(@NonNull Context context,
+                                                       @Nullable String countryCode,
+                                                       boolean online) {
+        if (newsObserver != null
+                && countryCode.equals(NewsGetter.countryCode)
+                && NewsGetter.online == online) {
+            return newsObserver;
+        }
+        NewsGetter.countryCode = countryCode == null ? "us" : countryCode;
+        NewsGetter.online = online;
         Gson gson = new Gson();
-        Single<NewsResponse> obs = Single.create((SingleEmitter<String> singleEmitter) -> {
+        newsObserver = Single.create((SingleEmitter<String> singleEmitter) -> {
             // In accordance to the item 5 step 5 hw 4
             Thread.sleep(idleTime);
             if (online) {
                 createOnlineRequest(singleEmitter);
             } else {
-                Context context = weakContext.get();
-                if (context != null) getOfflineNews(singleEmitter, context);
+                getOfflineNews(singleEmitter, context);
             }
         })
                 .map((String it) -> gson.fromJson(it, NewsResponse.class))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        return obs.subscribe(onProc, onError);
+        return newsObserver;
     }
 
-    private void createOnlineRequest(@NonNull SingleEmitter<String> emitter) throws IOException {
+    private static void createOnlineRequest(@NonNull SingleEmitter<String> emitter) throws IOException {
         URL url = new URL(String.format(formatNewsURL, countryCode, BuildConfig.APIkey));
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
         try {
@@ -94,7 +99,7 @@ public class NewsGetter {
         }
     }
 
-    private void getOfflineNews(@NonNull SingleEmitter<String> emitter, @NonNull Context context) {
+    private static void getOfflineNews(@NonNull SingleEmitter<String> emitter, @NonNull Context context) {
         String offlineText = AssetsReader.ReadFromAssetFile(
                 "offline_news_example.json",
                 context);
@@ -105,8 +110,8 @@ public class NewsGetter {
         }
     }
 
-    private long copyTo(@NonNull BufferedReader bufferedReader,
-                        @NonNull Writer out) throws IOException {
+    private static long copyTo(@NonNull BufferedReader bufferedReader,
+                               @NonNull Writer out) throws IOException {
         long charsCopied = 0;
         char[] buffer = new char[bufferSize];
         while (true) {

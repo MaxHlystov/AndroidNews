@@ -14,7 +14,7 @@ public class AssetsReader {
     private static final String LOG_TAG = "NewsApp";
 
     private AssetsReader() {
-        throw new IllegalAccessError("AssetsReader's constructor invokation.");
+        throw new IllegalAccessError("AssetsReader's constructor invocation.");
     }
 
     @Nullable
@@ -37,12 +37,15 @@ public class AssetsReader {
             return null;
         } finally {
             try {
-                if (isr != null)
+                if (isr != null) {
                     isr.close();
-                if (fIn != null)
+                }
+                if (fIn != null) {
                     fIn.close();
-                if (input != null)
+                }
+                if (input != null) {
                     input.close();
+                }
             } catch (Exception e2) {
                 Log.e(LOG_TAG, "Error closing asset file", e2);
             }

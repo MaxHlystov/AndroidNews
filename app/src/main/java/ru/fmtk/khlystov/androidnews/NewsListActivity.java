@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.appconfig.AppConfig;
@@ -24,11 +26,14 @@ import ru.fmtk.khlystov.newsgetter.Article;
 import ru.fmtk.khlystov.newsgetter.NewsGetter;
 import ru.fmtk.khlystov.newsgetter.NewsResponse;
 
-import static ru.fmtk.khlystov.androidnews.ContextUtils.isHorizontalOrientation;
+import static ru.fmtk.khlystov.utils.ContextUtils.isHorizontalOrientation;
 
 public class NewsListActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "NewsApp";
+
+    @Nullable
+    private RecyclerView recyclerView = null;
 
     @Nullable
     private Disposable disposableNewsGetter = null;
@@ -43,8 +48,10 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
+        recyclerView = findViewById(R.id.activity_news_list__rec_view);
         progressBar = findViewById(R.id.activity_news_list__progress_bar);
         configuration = new AppConfig(this);
+        setRecyclerView();
         updateNews();
     }
 
@@ -99,13 +106,13 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void updateNews() {
         showProgress();
-        NewsGetter newsGetter = new NewsGetter(this,
+        Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(this,
                 getString(R.string.country_code),
                 configuration.isNeedFetchNewsFromOnlineFlag());
-        disposableNewsGetter = newsGetter.observeNews((@Nullable NewsResponse newsResponse) -> {
+        disposableNewsGetter = newsObserver.subscribe((@Nullable NewsResponse newsResponse) -> {
                     if (newsResponse != null) {
                         hideProgress();
-                        setNewsAdapter(newsResponse.getArticles());
+                        updateNewsInAdapter(newsResponse.getArticles());
                     }
                 },
                 throwable -> {
@@ -126,17 +133,10 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    private void setNewsAdapter(@Nullable List<Article> articlesList) {
-        RecyclerView recyclerView = findViewById(R.id.activity_news_list__rec_view);
+    private void updateNewsInAdapter(@Nullable List<Article> articlesList) {
         if (articlesList != null) {
-            recyclerView.setAdapter(
-                    new NewsRecyclerAdapter(articlesList,
-                            new STDDateConverter(getApplicationContext()),
-                            this::handleOnNewsItemClick));
-            recyclerView.setLayoutManager(getLayoutManager());
-            recyclerView.addItemDecoration(new SpaceItemDecoration(
-                    getResources().getDimensionPixelSize(
-                            R.dimen.activity_news_list__space_between_items)));
+            NewsRecyclerAdapter newsRecyclerAdapter = (NewsRecyclerAdapter) recyclerView.getAdapter();
+            newsRecyclerAdapter.replaceData(articlesList);
         } else {
             Snackbar.make(recyclerView, R.string.news_list_activity__adapter_set_error, Snackbar.LENGTH_LONG).show();
         }
@@ -153,4 +153,16 @@ public class NewsListActivity extends AppCompatActivity {
     private void handleOnNewsItemClick(@NonNull View view, @NonNull Article article) {
         NewsDetailesActivity.startActivity(this, article);
     }
+
+    private void setRecyclerView() {
+        recyclerView.setAdapter(
+                new NewsRecyclerAdapter(new ArrayList<Article>(),
+                        new STDDateConverter(getApplicationContext()),
+                        this::handleOnNewsItemClick));
+        recyclerView.setLayoutManager(getLayoutManager());
+        recyclerView.addItemDecoration(new SpaceItemDecoration(
+                getResources().getDimensionPixelSize(
+                        R.dimen.activity_news_list__space_between_items)));
+    }
+
 }
