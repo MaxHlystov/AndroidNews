@@ -11,6 +11,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.fmtk.khlystov.NewsApplication;
 import ru.fmtk.khlystov.androidnews.BuildConfig;
 import ru.fmtk.khlystov.utils.AssetsReader;
 
@@ -29,7 +30,6 @@ public class NewsGetter {
     @NonNull
     private static final String formatNewsURL = "https://newsapi.org/v2/top-headlines?country=%s&apiKey=%s";
     private static final int bufferSize = 8 * 1024;
-    private static final String LOG_TAG = "NewsApp";
 
     @Nullable
     private static String countryCode;
@@ -87,7 +87,7 @@ public class NewsGetter {
                 emitter.onSuccess(s);
             }
         } catch (IOException ex) {
-            Log.d(LOG_TAG, "Error", ex);
+            Log.d(NewsApplication.LOG_TAG, "Error", ex);
             emitter.onError(ex);
         } finally {
             urlConn.disconnect();

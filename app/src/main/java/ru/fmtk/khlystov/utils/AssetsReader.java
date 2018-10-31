@@ -9,9 +9,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class AssetsReader {
+import ru.fmtk.khlystov.NewsApplication;
 
-    private static final String LOG_TAG = "NewsApp";
+public class AssetsReader {
 
     private AssetsReader() {
         throw new IllegalAccessError("AssetsReader's constructor invocation.");
@@ -33,7 +33,7 @@ public class AssetsReader {
                 returnString.append(line);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Error reading asset file", e);
+            Log.e(NewsApplication.LOG_TAG, "Error reading asset file", e);
             return null;
         } finally {
             try {
@@ -47,7 +47,7 @@ public class AssetsReader {
                     input.close();
                 }
             } catch (Exception e2) {
-                Log.e(LOG_TAG, "Error closing asset file", e2);
+                Log.e(NewsApplication.LOG_TAG, "Error closing asset file", e2);
             }
         }
         return returnString.toString();

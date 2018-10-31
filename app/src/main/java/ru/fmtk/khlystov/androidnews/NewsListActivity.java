@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
+import ru.fmtk.khlystov.NewsApplication;
 import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.appconfig.AppConfig;
 import ru.fmtk.khlystov.newsgetter.Article;
@@ -29,8 +30,6 @@ import ru.fmtk.khlystov.newsgetter.NewsResponse;
 import static ru.fmtk.khlystov.utils.ContextUtils.isHorizontalOrientation;
 
 public class NewsListActivity extends AppCompatActivity {
-
-    private static final String LOG_TAG = "NewsApp";
 
     @Nullable
     private RecyclerView recyclerView = null;
@@ -76,7 +75,7 @@ public class NewsListActivity extends AppCompatActivity {
                 onMainMenuGetOnlineNewsItemClicked(item);
                 break;
             default:
-                Log.e(LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
+                Log.e(NewsApplication.LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -120,7 +119,7 @@ public class NewsListActivity extends AppCompatActivity {
                             }
                         },
                         throwable -> {
-                            Log.d(LOG_TAG, "Error in news getting", throwable);
+                            Log.d(NewsApplication.LOG_TAG, "Error in news getting", throwable);
                             hideProgress();
                         });
             }
