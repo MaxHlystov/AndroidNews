@@ -171,7 +171,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                 image.setVisibility(View.GONE);
             } else {
                 image.setVisibility(View.VISIBLE);
-                Picasso.get().load(article.getUrlToImage()).into(image);
+                Picasso.get().load(article.getUrlToImage())
+                        .resize(800, 600)
+                        .centerInside()
+                        .onlyScaleDown()
+                        .into(image);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(
@@ -232,7 +236,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                 image.setVisibility(View.GONE);
             } else {
                 image.setVisibility(View.VISIBLE);
-                Picasso.get().load(article.getUrlToImage()).into(image);
+                Picasso.get().load(article.getUrlToImage())
+                        .resize(800, 600)
+                        .centerInside()
+                        .onlyScaleDown()
+                        .into(image);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(
