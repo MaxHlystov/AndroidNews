@@ -30,7 +30,7 @@ public class DTOResult implements Serializable {
     private String publishedDate;
     @SerializedName("multimedia")
     @Expose
-    private List<DTOMultimedium> multimedia = null;
+    private List<DTOMultimedium> multimedia;
     private final static long serialVersionUID = -8046644522326767844L;
 
     public DTOResult(String section, String subsection, String title, String _abstract, String url,

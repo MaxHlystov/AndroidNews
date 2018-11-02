@@ -4,17 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.util.Date;
 
@@ -30,11 +26,6 @@ public class NewsDetailesActivity extends AppCompatActivity {
     @NonNull
     private static final String ARTICLE_OBJECT = "NewsDetailesActivity_ARTICLE_OBJECT";
 
-    @NonNull
-    private static final String simpleString = "0123456789";
-
-    private static final int TEMPORARY_MAX_ARTICLE_LENGTH = 4500;
-
     @Nullable
     private Article article = null;
 
@@ -42,7 +33,6 @@ public class NewsDetailesActivity extends AppCompatActivity {
         Intent intent = new Intent(parent, NewsDetailesActivity.class);
         intent.putExtra(ARTICLE_OBJECT, article);
         parent.startActivity(intent);
-
     }
 
     @Override
@@ -58,13 +48,9 @@ public class NewsDetailesActivity extends AppCompatActivity {
         }
 
         article = getIntent().getParcelableExtra(ARTICLE_OBJECT);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         fillContent();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
@@ -99,7 +85,7 @@ public class NewsDetailesActivity extends AppCompatActivity {
             String url = article.getUrl();
             if (url != null) {
                 IntentUtils.showIntent(this,
-                        findViewById(R.id.activity_news_detailes_layout__content),
+                        findViewById(R.id.activity_news_detailes__web_view),
                         IntentUtils.getBrowserIntent(url),
                         getString(R.string.no_browser_error));
             }
@@ -107,52 +93,12 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     private void fillContent() {
+        WebView webView = findViewById(R.id.activity_news_detailes__web_view);
+        webView.setWebViewClient(new WebViewClient());
         if (article != null) {
-            String urlToImage = article.getUrlToImage();
-            ImageView imageView = findViewById(R.id.activity_news_detailes_layout__image);
-            if (imageView != null) {
-                if (isEmpty(urlToImage)) {
-                    imageView.setVisibility(View.GONE);
-                } else {
-                    imageView.setVisibility(View.VISIBLE);
-                    Picasso.get().load(urlToImage).into(imageView);
-                }
-            }
+            String url = article.getUrl();
+            if (!isEmpty(url)) webView.loadUrl(url);
 
-            String source = article.getSourceName();
-            TextView authorTextView = findViewById(R.id.activity_news_detailes_layout__author);
-            if (!isEmpty(source)) {
-                ActionBar actionBar = getSupportActionBar();
-                if (actionBar != null) {
-                    actionBar.setTitle(source);
-                }
-            }
-
-            String author = article.getAuthor();
-            if (authorTextView != null) {
-                authorTextView.setText(author);
-            }
-
-            String title = article.getTitle();
-            TextView titleTextView = findViewById(R.id.activity_news_detailes_layout__title);
-            if (titleTextView != null) {
-                titleTextView.setText(title);
-            }
-
-            Date publishedAt = article.getPublishedAt();
-            TextView publishedAtTextView = findViewById(R.id.activity_news_detailes_layout__published);
-            if (publishedAtTextView != null) {
-                publishedAtTextView.setText(dateToString(publishedAt));
-            }
-
-            String content = inflateContent(article.getContent(), TEMPORARY_MAX_ARTICLE_LENGTH);
-            TextView contentTextView = findViewById(R.id.activity_news_detailes_layout__content);
-            if (!isEmpty(content)) {
-                contentTextView.setVisibility(View.VISIBLE);
-                contentTextView.setText(content);
-            } else {
-                contentTextView.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -160,18 +106,5 @@ public class NewsDetailesActivity extends AppCompatActivity {
     private String dateToString(Date publishedAt) {
         IDateConverter dateConverter = new STDDateConverter(getApplicationContext());
         return dateConverter.convert(publishedAt);
-    }
-
-    @Nullable
-    private String inflateContent(@Nullable String content, int needLength) {
-        String template = isEmpty(content) ? simpleString : content;
-        if (template.length() < needLength) {
-            StringBuilder stringBuilder = new StringBuilder(template);
-            while (stringBuilder.length() < needLength) {
-                stringBuilder.append(template);
-            }
-            return stringBuilder.toString();
-        }
-        return content;
     }
 }

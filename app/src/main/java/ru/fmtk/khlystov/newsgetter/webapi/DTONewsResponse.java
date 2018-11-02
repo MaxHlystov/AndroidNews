@@ -7,8 +7,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DTONewsResponse implements Serializable
-{
+public class DTONewsResponse implements Serializable {
 
     @SerializedName("status")
     @Expose
@@ -18,7 +17,7 @@ public class DTONewsResponse implements Serializable
     private String section;
     @SerializedName("results")
     @Expose
-    private List<DTOResult> results = null;
+    private List<DTOResult> results;
     private final static long serialVersionUID = -8645667809215850272L;
 
     public DTONewsResponse(String status, String section, List<DTOResult> results) {

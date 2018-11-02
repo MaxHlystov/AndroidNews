@@ -17,6 +17,7 @@
     <string name="news_image">Картинка к новости</string>
     <string name="main_menu__get_online_news">Получать новости онлайн</string>
     <string name="share_link">Отправить ссылку</string>
-    <string name="news_recycler_adapter__source_undefined">Неопознанный пишуший объект</string>
     <string name="news_list_activity__adapter_set_error">Ошибка отображения новостей!</string>
+    <string name="activity_news_list__reload">обновить</string>
+    <string name="activity_news_list__error_loading_message">Во время загрузки новостей возникла ошибка! Попробуйте загрузить новости еще раз.</string>
 </resources>

@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +48,20 @@ public class NewsListActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     @Nullable
-    private NewsSectionsSpinner newsSectionsSpinner;
+    private Button reloadButton;
+
+    @Nullable
+    private TextView errorTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-        recyclerView = findViewById(R.id.activity_news_list__rec_view);
-        progressBar = findViewById(R.id.activity_news_list__progress_bar);
+        initViewsVariables();
         configuration = new AppConfig(this);
+        if (reloadButton != null) {
+            reloadButton.setOnClickListener(v -> this.updateNews());
+        }
         setNewsSectionsSpinner();
         setRecyclerView();
         updateNews();
@@ -95,6 +102,13 @@ public class NewsListActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    private void initViewsVariables() {
+        recyclerView = findViewById(R.id.activity_news_list__rec_view);
+        progressBar = findViewById(R.id.activity_news_list__progress_bar);
+        reloadButton = findViewById(R.id.activity_news_list__reload_button);
+        errorTextView = findViewById(R.id.activity_news_list__error_text);
+    }
+
     private void onMainMenuAboutItemClicked(@NonNull MenuItem item) {
         AboutActivity.startActivity(this);
     }
@@ -113,34 +127,43 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void updateNews() {
         if (configuration != null) {
-            showProgress();
-            Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(this,
+            showStartLoading();
+            Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(
+                    this,
                     configuration.getNews_section(),
                     configuration.isNeedFetchNewsFromOnlineFlag());
             if (newsObserver != null) {
-                disposableNewsGetter = newsObserver.subscribe((@Nullable NewsResponse newsResponse) -> {
-                            if (newsResponse != null) {
-                                hideProgress();
-                                updateNewsInAdapter(newsResponse.getArticles());
-                            }
-                        },
-                        throwable -> {
-                            Log.d(NewsApplication.LOG_TAG, "Error in news getting", throwable);
-                            hideProgress();
-                        });
+                disposableNewsGetter = newsObserver.subscribe(
+                        this::showCompletLoading,
+                        this::showErrorLoading);
             }
         }
     }
 
-    private void hideProgress() {
-        if (progressBar != null) {
-            progressBar.setVisibility(View.GONE);
-        }
+    private void showStartLoading() {
+        setViewVisibility(progressBar, View.VISIBLE);
+        setViewVisibility(reloadButton, View.GONE);
+        setViewVisibility(errorTextView, View.GONE);
     }
 
-    private void showProgress() {
-        if (progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
+    private void showCompletLoading(@Nullable NewsResponse newsResponse) {
+        setViewVisibility(errorTextView, View.GONE);
+        if (newsResponse != null) {
+            updateNewsInAdapter(newsResponse.getArticles());
+        }
+        setViewVisibility(progressBar, View.GONE);
+    }
+
+    private void showErrorLoading(@NonNull Throwable throwable) {
+        Log.d(NewsApplication.LOG_TAG, "Error in news getting", throwable);
+        setViewVisibility(progressBar, View.GONE);
+        setViewVisibility(reloadButton, View.VISIBLE);
+        setViewVisibility(errorTextView, View.VISIBLE);
+    }
+
+    private void setViewVisibility(@Nullable View view, int visibility) {
+        if (view != null) {
+            view.setVisibility(visibility);
         }
     }
 
@@ -181,8 +204,8 @@ public class NewsListActivity extends AppCompatActivity {
     private void setNewsSectionsSpinner() {
         Spinner spinner = findViewById(R.id.activity_news_list__nyt_sections);
         String[] sections = getResources().getStringArray(R.array.nyt_sections);
-        if (spinner != null) {
-            newsSectionsSpinner = new NewsSectionsSpinner(this,
+        if (spinner != null && configuration != null) {
+            new NewsSectionsSpinner(this,
                     spinner,
                     sections,
                     configuration.getNews_section(),

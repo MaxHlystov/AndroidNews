@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.fmtk.khlystov.AppConfig;
 import ru.fmtk.khlystov.newsgetter.webapi.DTONewsResponse;
-import ru.fmtk.khlystov.newsgetter.webapi.NetworkAPI;
+import ru.fmtk.khlystov.newsgetter.webapi.NYTNetworkAPI;
 import ru.fmtk.khlystov.utils.AssetsReader;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class NewsGetter {
 
-    private static final long idleTime = 2000; // 2 second
+    private static final boolean throwError = false;
 
     @Nullable
     private static String section;
@@ -43,14 +43,20 @@ public class NewsGetter {
         NewsGetter.section = section == null ? AppConfig.defaultNewsSection : section;
         NewsGetter.online = online;
         Gson gson = new Gson();
-        newsObserver = Single.create((SingleEmitter<String> singleEmitter) -> {
-            if (online) {
-                NetworkAPI.createOnlineRequest(singleEmitter, section);
-            } else {
+
+        Single<DTONewsResponse> dTOnewsObserver;
+        if (online) {
+            dTOnewsObserver = NYTNetworkAPI.createOnlineRequest(section);
+        } else {
+            dTOnewsObserver = Single.create((SingleEmitter<String> singleEmitter) -> {
                 getOfflineNews(singleEmitter, context);
-            }
-        })
-                .map((String it) -> gson.fromJson(it, DTONewsResponse.class))
+            })
+                    .map((String it) -> gson.fromJson(it, DTONewsResponse.class));
+        }
+        newsObserver = dTOnewsObserver
+                .doOnSuccess(it -> {
+                    if (throwError) throw new IOException("Test exception!");
+                })
                 .subscribeOn(Schedulers.io())
                 .map(NewsConverter::convertToNewsResponse)
                 .subscribeOn(Schedulers.computation())

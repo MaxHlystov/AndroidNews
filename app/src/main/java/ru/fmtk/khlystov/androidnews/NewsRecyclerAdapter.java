@@ -82,7 +82,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
             @Override
             public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
                 Article oldArticle = articles.get(oldItemPosition);
-                Article newArticle = articles.get(newItemPosition);
+                Article newArticle = newArticles.get(newItemPosition);
                 if (oldArticle != null && newArticle != null) {
                     return oldArticle.hashCode() == newArticle.hashCode();
                 }
@@ -92,7 +92,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
             @Override
             public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                 Article oldArticle = articles.get(oldItemPosition);
-                Article newArticle = articles.get(newItemPosition);
+                Article newArticle = newArticles.get(newItemPosition);
                 if (oldArticle != null) {
                     return oldArticle.equals(newArticle);
                 }
@@ -114,9 +114,9 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
-        private final TextView section;
+        private final TextView subsection;
 
-        @NonNull
+        @Nullable
         private final TextView author;
 
         @NonNull
@@ -133,7 +133,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
-            section = itemView.findViewById(R.id.news_item_layout__section);
+            subsection = itemView.findViewById(R.id.news_item_layout__subsection);
             author = itemView.findViewById(R.id.news_item_layout__author);
             title = itemView.findViewById(R.id.news_item_layout__title);
             preview = itemView.findViewById(R.id.news_item_layout__preview);
@@ -144,9 +144,12 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         protected void bind(@NonNull Article article,
                             @Nullable OnItemClickListener onItemClickListener,
                             @Nullable IDateConverter dateConverter) {
-            String sectionName = article.getSection();
+            String sectionName = article.getSubsection();
             if (!isEmpty(sectionName)) {
-                section.setText(sectionName);
+                subsection.setText(sectionName);
+                subsection.setVisibility(View.VISIBLE);
+            } else {
+                subsection.setVisibility(View.GONE);
             }
             if (author != null) {
                 author.setText(article.getAuthor());

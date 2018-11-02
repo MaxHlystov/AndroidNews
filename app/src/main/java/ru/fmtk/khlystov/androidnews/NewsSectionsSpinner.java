@@ -11,16 +11,13 @@ import android.widget.Spinner;
 public class NewsSectionsSpinner {
 
     @NonNull
-    private Spinner spinner;
+    private final Spinner spinner;
 
     @NonNull
-    private String[] sections;
+    private final String[] sections;
 
     @NonNull
-    private ArrayAdapter<String> adapter;
-
-    @Nullable
-    private OnSelectedItemChanged onSelectedItemChangedListener;
+    private final ArrayAdapter<String> adapter;
 
     private int currentPosition = -1;
     private boolean canProcessSelection = false;
@@ -32,8 +29,7 @@ public class NewsSectionsSpinner {
         this.sections = sections;
         this.adapter = new ArrayAdapter<>(context,
                 R.layout.news_sections_item, sections);
-        this.onSelectedItemChangedListener = onSelectedItemChangedListener;
-        adapter.setDropDownViewResource(R.layout.news_sections_selected_item); // android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.news_sections_selected_item);
         spinner.setAdapter(adapter);
         setCurrentSection(currentValue);
         if (onSelectedItemChangedListener != null) {
@@ -42,7 +38,10 @@ public class NewsSectionsSpinner {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     if (currentPosition != position && canProcessSelection) {
                         currentPosition = position;
-                        onSelectedItemChangedListener.process(getCurrentSection());
+                        String section = getCurrentSection();
+                        if (section != null) {
+                            onSelectedItemChangedListener.process(section);
+                        }
                     }
                     if (!canProcessSelection) canProcessSelection = true;
                 }

@@ -29,7 +29,6 @@ dependencies {
     implementation libraries.supportAppCompat
     implementation libraries.supportCoreUtils
     implementation libraries.supportDesign
-    implementation libraries.gson
     implementation libraries.rxJava
     implementation libraries.rxAndroid
     implementation(libraries.picasso) {
@@ -37,6 +36,9 @@ dependencies {
     }
     implementation libraries.recyclerView
     implementation libraries.cardView
-
     implementation project(':imagedlistitem')
+    implementation libraries.retrofit
+    implementation libraries.converter_gson
+    implementation libraries.adapter_rxjava
+    implementation libraries.logging_interceptor
 }

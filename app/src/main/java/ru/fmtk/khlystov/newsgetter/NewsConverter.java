@@ -14,12 +14,10 @@ import ru.fmtk.khlystov.newsgetter.webapi.DTOMultimedium;
 import ru.fmtk.khlystov.newsgetter.webapi.DTONewsResponse;
 import ru.fmtk.khlystov.newsgetter.webapi.DTOResult;
 
-import static android.text.TextUtils.isEmpty;
-
 public class NewsConverter {
 
     @NonNull
-    private static final String DateFormat = "EEE MMM d HH:mm:ss zz yyyy";
+    private static final String NYTDateFormat = "yyyy-MM-dd'T'HH:mm:ssX";
 
     @NonNull
     private static final String imageFormat = "superJumbo";
@@ -51,6 +49,7 @@ public class NewsConverter {
         if (NYTSource == null) NYTSource = new Source("NYT", "NYT");
         return new Article(NYTSource,
                 dtoResult.getSection(),
+                dtoResult.getSubsection(),
                 null,
                 dtoResult.getTitle(),
                 dtoResult.getAbstract(),
@@ -65,10 +64,7 @@ public class NewsConverter {
         if (multimedia != null) {
             for (DTOMultimedium dtoMultimedium : multimedia) {
                 if (Objects.equals(imageFormat, dtoMultimedium.getFormat())) {
-                    String url = dtoMultimedium.getUrl();
-                    if (!isEmpty(url)) {
-                        return url;
-                    }
+                    return dtoMultimedium.getUrl();
                 }
             }
         }
@@ -79,7 +75,7 @@ public class NewsConverter {
     private static Date stringToDate(@Nullable String date) {
         if (date == null) return null;
         ParsePosition pos = new ParsePosition(0);
-        SimpleDateFormat simpledateformat = new SimpleDateFormat(DateFormat);
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(NYTDateFormat);
         return simpledateformat.parse(date, pos);
 
     }
