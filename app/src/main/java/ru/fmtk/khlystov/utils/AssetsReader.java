@@ -14,7 +14,7 @@ public class AssetsReader {
     private static final String LOG_TAG = "NewsApp";
 
     private AssetsReader() {
-        throw new IllegalAccessError("AssetsReader's constructor invokation.");
+        throw new IllegalAccessError("AssetsReader's constructor invocation.");
     }
 
     @Nullable
@@ -28,7 +28,7 @@ public class AssetsReader {
                     .open(fileName, AssetManager.ACCESS_STREAMING);
             isr = new InputStreamReader(fIn);
             input = new BufferedReader(isr);
-            String line = "";
+            String line;
             while ((line = input.readLine()) != null) {
                 returnString.append(line);
             }

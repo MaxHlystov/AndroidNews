@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="nyt_sections">
+        <item>home</item>
+        <item>opinion</item>
+        <item>world</item>
+        <item>national</item>
+        <item>politics</item>
+        <item>upshot</item>
+        <item>nyregion</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+        <item>health</item>
+        <item>sports</item>
+        <item>arts</item>
+        <item>books</item>
+        <item>movies</item>
+        <item>theater</item>
+        <item>sundayreview</item>
+        <item>fashion</item>
+        <item>tmagazine</item>
+        <item>food</item>
+        <item>travel</item>
+        <item>magazine</item>
+        <item>realestate</item>
+        <item>automobiles</item>
+        <item>obituaries</item>
+        <item>insider</item>
+    </string-array>
+</resources>
+
+

@@ -27,6 +27,9 @@ public class Article implements Parcelable {
     private final Source source;
 
     @Nullable
+    private final String section;
+
+    @Nullable
     private final String author;
 
     @Nullable
@@ -48,6 +51,7 @@ public class Article implements Parcelable {
     private final Date publishedAt;
 
     public Article(@Nullable Source source,
+                   @Nullable String section,
                    @Nullable String author,
                    @Nullable String title,
                    @Nullable String description,
@@ -58,6 +62,7 @@ public class Article implements Parcelable {
 
     {
         this.source = source;
+        this.section = section;
         this.author = author;
         this.title = title;
         this.description = description;
@@ -69,6 +74,7 @@ public class Article implements Parcelable {
 
     protected Article(@NonNull Parcel in) {
         source = (Source) in.readValue(Source.class.getClassLoader());
+        section = in.readString();
         author = in.readString();
         title = in.readString();
         description = in.readString();
@@ -82,6 +88,11 @@ public class Article implements Parcelable {
     @Nullable
     public Source getSource() {
         return source;
+    }
+
+    @Nullable
+    public String getSection() {
+        return section;
     }
 
     @Nullable
@@ -136,14 +147,15 @@ public class Article implements Parcelable {
             return false;
         }
         Article article = (Article) o;
-        return Objects.equals(getAuthor(), article.getAuthor()) &&
+        return Objects.equals(getSection(), article.getSection()) &&
+                Objects.equals(getAuthor(), article.getAuthor()) &&
                 Objects.equals(getTitle(), article.getTitle()) &&
                 Objects.equals(getPublishedAt(), article.getPublishedAt());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAuthor(), getTitle(), getPublishedAt());
+        return Objects.hash(getSection(), getAuthor(), getTitle(), getPublishedAt());
     }
 
     @Override
@@ -154,6 +166,7 @@ public class Article implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeValue(source);
+        dest.writeString(section);
         dest.writeString(author);
         dest.writeString(title);
         dest.writeString(description);

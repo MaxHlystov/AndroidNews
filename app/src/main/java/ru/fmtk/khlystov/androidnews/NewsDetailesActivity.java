@@ -18,8 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
-import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
-import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
+import ru.fmtk.khlystov.utils.fashionutils.IDateConverter;
+import ru.fmtk.khlystov.utils.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.newsgetter.Article;
 import ru.fmtk.khlystov.utils.IntentUtils;
 

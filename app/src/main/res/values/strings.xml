@@ -17,14 +17,8 @@
     <string name="about_menu_item">About</string>
     <string name="activity_about__my_name">Maksim Khlystov</string>
     <string name="news_image">News image</string>
-    <string name="country_code">us</string>
     <string name="main_menu__get_online_news">Get online news</string>
     <string name="share_link">Share link</string>
-    <string name="nyt_data_converter__just_now_format">just now,%s</string>
-    <string name="nyt_data_converter__an_hour_format">An hr. ago,%s</string>
-    <string name="nyt_data_converter__some_hours_format">%d hr. ago,%s</string>
-    <string name="nyt_data_converter__yesterday_format">Yesterday,%s</string>
-    <string name="nyt_data_converter__day_of_month_format">MMM dd,%s</string>
     <string name="news_recycler_adapter__source_undefined">Undefined writing object</string>
     <string name="news_list_activity__adapter_set_error">Error in news draw!</string>
 </resources>
