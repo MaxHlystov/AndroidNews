@@ -20,7 +20,7 @@ public class NewsConverter {
     private static final String NYTDateFormat = "yyyy-MM-dd'T'HH:mm:ssX";
 
     @NonNull
-    private static final String imageFormat = "superJumbo";
+    private static final String IMAGE_FORMAT = "superJumbo";
 
     @Nullable
     private static Source NYTSource;
@@ -63,7 +63,7 @@ public class NewsConverter {
     private static String getNormalImageUrl(@Nullable List<DTOMultimedium> multimedia) {
         if (multimedia != null) {
             for (DTOMultimedium dtoMultimedium : multimedia) {
-                if (Objects.equals(imageFormat, dtoMultimedium.getFormat())) {
+                if (Objects.equals(IMAGE_FORMAT, dtoMultimedium.getFormat())) {
                     return dtoMultimedium.getUrl();
                 }
             }

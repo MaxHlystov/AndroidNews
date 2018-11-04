@@ -18,13 +18,13 @@ public class NYTNetworkAPI {
     private static final int TIMEOUT_IN_SECONDS = 2;
 
     @NonNull
-    private static final String formatNewsURL = "https://api.nytimes.com";
+    private static final String FORMAT_NEWS_URL = "https://api.nytimes.com";
 
     @NonNull
     public static Single<DTONewsResponse> createOnlineRequest(String section) {
         OkHttpClient okHttpClient = getHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(formatNewsURL)
+                .baseUrl(FORMAT_NEWS_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 public class AppConfig {
 
     @NonNull
-    public static final String defaultNewsSection = "home";
+    public static final String DEFAULT_NEWS_SECTION = "home";
 
     @NonNull
     private static final String PREF_ALTERNATIVE_CONFIG = "ru.fmtk.khlystov.appconfig.alt_config";
@@ -32,7 +32,7 @@ public class AppConfig {
     public AppConfig(@NonNull Context context) {
         sharedPreferencesWeakReference = new WeakReference<>(
                 context.getSharedPreferences(PREF_ALTERNATIVE_CONFIG, Context.MODE_PRIVATE));
-        news_section = defaultNewsSection;
+        news_section = DEFAULT_NEWS_SECTION;
         restore();
     }
 
@@ -57,18 +57,18 @@ public class AppConfig {
     @NonNull
     public String getNews_section() {
         if (news_section != null) return news_section;
-        return defaultNewsSection;
+        return DEFAULT_NEWS_SECTION;
     }
 
     public void setNews_section(@Nullable String news_section) {
-        this.news_section = news_section != null ? news_section : defaultNewsSection;
+        this.news_section = news_section != null ? news_section : DEFAULT_NEWS_SECTION;
     }
 
     private void restore() {
         SharedPreferences shp = sharedPreferencesWeakReference.get();
         if (shp != null) {
             needFetchNewsFromOnlineFlag = shp.getBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag);
-            news_section = shp.getString(PREF_NEWS_SECTION, defaultNewsSection);
+            news_section = shp.getString(PREF_NEWS_SECTION, DEFAULT_NEWS_SECTION);
         }
     }
 }

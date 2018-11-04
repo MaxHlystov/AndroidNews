@@ -11,6 +11,7 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.fmtk.khlystov.AppConfig;
+import ru.fmtk.khlystov.androidnews.R;
 import ru.fmtk.khlystov.newsgetter.webapi.DTONewsResponse;
 import ru.fmtk.khlystov.newsgetter.webapi.NYTNetworkAPI;
 import ru.fmtk.khlystov.utils.AssetsReader;
@@ -20,12 +21,15 @@ import java.io.IOException;
 
 public class NewsGetter {
 
-    private static final boolean throwError = false;
+    private static final boolean THROW_ERROR = false;
 
     @Nullable
     private static String section;
 
     private static boolean online;
+
+    @Nullable
+    private static Gson gson = null;
 
     @Nullable
     private static Single<NewsResponse> newsObserver = null;
@@ -34,45 +38,51 @@ public class NewsGetter {
     public static Single<NewsResponse> getNewsObserver(@NonNull Context context,
                                                        @Nullable String section,
                                                        boolean online) {
-        if (newsObserver != null
-                && NewsGetter.section != null
-                && NewsGetter.section.equals(section)
-                && NewsGetter.online == online) {
-            return newsObserver;
+        if (newsObserver == null
+                || NewsGetter.section == null
+                || !NewsGetter.section.equals(section)
+                || NewsGetter.online != online) {
+            setNewsObserver(context, section, online);
         }
-        NewsGetter.section = section == null ? AppConfig.defaultNewsSection : section;
-        NewsGetter.online = online;
-        Gson gson = new Gson();
+        return newsObserver;
+    }
 
-        Single<DTONewsResponse> dTOnewsObserver;
+    @Nullable
+    public static void setNewsObserver(@NonNull Context context,
+                                       @Nullable String section,
+                                       boolean online) {
+        NewsGetter.section = section == null ? AppConfig.DEFAULT_NEWS_SECTION : section;
+        NewsGetter.online = online;
+        if (!online && gson == null) gson = new Gson();
+        Single<DTONewsResponse> dTONewsObserver;
         if (online) {
-            dTOnewsObserver = NYTNetworkAPI.createOnlineRequest(section);
+            dTONewsObserver = NYTNetworkAPI.createOnlineRequest(section);
         } else {
-            dTOnewsObserver = Single.create((SingleEmitter<String> singleEmitter) -> {
-                getOfflineNews(singleEmitter, context);
-            })
-                    .map((String it) -> gson.fromJson(it, DTONewsResponse.class));
+            dTONewsObserver = getOfflineNewsObserver(context);
         }
-        newsObserver = dTOnewsObserver
+        newsObserver = dTONewsObserver
                 .doOnSuccess(it -> {
-                    if (throwError) throw new IOException("Test exception!");
+                    if (THROW_ERROR) throw new IOException("Test exception!");
                 })
                 .subscribeOn(Schedulers.io())
                 .map(NewsConverter::convertToNewsResponse)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread());
-        return newsObserver;
     }
 
-    private static void getOfflineNews(@NonNull SingleEmitter<String> emitter, @NonNull Context context) {
-        String offlineText = AssetsReader.ReadFromAssetFile(
-                "offline_news_example.json",
-                context);
-        if (offlineText != null) {
-            emitter.onSuccess(offlineText);
-        } else {
-            emitter.onError(new IOException("Error reading assets file."));
-        }
+    private static Single<DTONewsResponse> getOfflineNewsObserver(@NonNull Context context) {
+        return Single.create((SingleEmitter<String> singleEmitter) -> {
+            String offlineText = AssetsReader.readFromAssetFile(
+                    R.raw.offline_news_example,
+                    context);
+            if (offlineText != null) {
+                singleEmitter.onSuccess(offlineText);
+            } else {
+                singleEmitter.onError(new IOException("Error reading assets file."));
+            }
+        })
+                .map((String it) -> gson.fromJson(it, DTONewsResponse.class));
+
     }
 
     private NewsGetter() {
