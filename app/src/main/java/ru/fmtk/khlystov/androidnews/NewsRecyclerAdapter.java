@@ -17,10 +17,14 @@ import java.util.List;
 
 import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
 import ru.fmtk.khlystov.newsgetter.Article;
+import ru.fmtk.khlystov.utils.NetworkUtils;
 
 import static android.text.TextUtils.isEmpty;
 
 public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder> {
+
+    private static int MAX_IMG_WIDTH = 800;
+    private static int MAX_IMG_HEIGHT = 600;
 
     @NonNull
     private final IDateConverter dateConverter;
@@ -66,38 +70,8 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     }
 
     public void replaceData(@NonNull List<Article> newArticles) {
-        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-
-            @Override
-            public int getOldListSize() {
-                return articles.size();
-            }
-
-            @Override
-            public int getNewListSize() {
-                return newArticles.size();
-            }
-
-            @Override
-            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                Article oldArticle = articles.get(oldItemPosition);
-                Article newArticle = articles.get(newItemPosition);
-                if (oldArticle != null && newArticle != null) {
-                    return oldArticle.hashCode() == newArticle.hashCode();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                Article oldArticle = articles.get(oldItemPosition);
-                Article newArticle = articles.get(newItemPosition);
-                if (oldArticle != null) {
-                    return oldArticle.equals(newArticle);
-                }
-                return false;
-            }
-        });
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(
+                new InternalDiffUtilCallback(articles, newArticles));
         this.articles = newArticles;
         diff.dispatchUpdatesTo(this);
     }
@@ -108,6 +82,50 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     public interface OnItemClickListener {
         void onItemClick(@NonNull View view, @NonNull Article article);
+    }
+
+    private static class InternalDiffUtilCallback extends DiffUtil.Callback {
+
+        @NonNull
+        private List<Article> oldArticles;
+
+        @NonNull
+        private List<Article> newArticles;
+
+        public InternalDiffUtilCallback(List<Article> oldArticles, List<Article> newArticles) {
+            this.oldArticles = oldArticles;
+            this.newArticles = newArticles;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldArticles.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newArticles.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            Article oldArticle = oldArticles.get(oldItemPosition);
+            Article newArticle = newArticles.get(newItemPosition);
+            if (oldArticle != null && newArticle != null) {
+                return oldArticle.hashCode() == newArticle.hashCode();
+            }
+            return false;
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            Article oldArticle = oldArticles.get(oldItemPosition);
+            Article newArticle = newArticles.get(newItemPosition);
+            if (oldArticle != null) {
+                return oldArticle.equals(newArticle);
+            }
+            return false;
+        }
     }
 
     protected abstract static class ViewHolder extends RecyclerView.ViewHolder {
@@ -171,11 +189,8 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                 image.setVisibility(View.GONE);
             } else {
                 image.setVisibility(View.VISIBLE);
-                Picasso.get().load(article.getUrlToImage())
-                        .resize(800, 600)
-                        .centerInside()
-                        .onlyScaleDown()
-                        .into(image);
+                NetworkUtils.getImgToImageView(article.getUrlToImage(),
+                        image, MAX_IMG_WIDTH, MAX_IMG_HEIGHT);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(
@@ -236,11 +251,8 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
                 image.setVisibility(View.GONE);
             } else {
                 image.setVisibility(View.VISIBLE);
-                Picasso.get().load(article.getUrlToImage())
-                        .resize(800, 600)
-                        .centerInside()
-                        .onlyScaleDown()
-                        .into(image);
+                NetworkUtils.getImgToImageView(article.getUrlToImage(),
+                        image, MAX_IMG_WIDTH, MAX_IMG_HEIGHT);
             }
             if (onItemClickListener != null) {
                 itemView.setOnClickListener(

@@ -31,6 +31,9 @@ import static ru.fmtk.khlystov.utils.ContextUtils.isHorizontalOrientation;
 
 public class NewsListActivity extends AppCompatActivity {
 
+    @NonNull
+    private static final String LOG_TAG = "NewsAppNewsListActivity";
+
     @Nullable
     private RecyclerView recyclerView = null;
 
@@ -45,6 +48,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "OnCreate activity: " + this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
         recyclerView = findViewById(R.id.activity_news_list__rec_view);
@@ -75,7 +79,7 @@ public class NewsListActivity extends AppCompatActivity {
                 onMainMenuGetOnlineNewsItemClicked(item);
                 break;
             default:
-                Log.e(NewsApplication.LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
+                Log.e(LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -83,9 +87,10 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (disposableNewsGetter != null) {
+        Log.d(LOG_TAG, "On destroy activity " + this);
+        /*if (disposableNewsGetter != null) {
             disposableNewsGetter.dispose();
-        }
+        }*/
         super.onDestroy();
     }
 
@@ -112,14 +117,18 @@ public class NewsListActivity extends AppCompatActivity {
                     getString(R.string.country_code),
                     configuration.isNeedFetchNewsFromOnlineFlag());
             if (newsObserver != null) {
-                disposableNewsGetter = newsObserver.subscribe((@Nullable NewsResponse newsResponse) -> {
+                disposableNewsGetter = newsObserver
+                        .doOnSuccess(it -> {
+                            Log.d(LOG_TAG, "Take news on : " + Thread.currentThread());
+                        })
+                        .subscribe((@Nullable NewsResponse newsResponse) -> {
                             if (newsResponse != null) {
                                 hideProgress();
                                 updateNewsInAdapter(newsResponse.getArticles());
                             }
                         },
                         throwable -> {
-                            Log.d(NewsApplication.LOG_TAG, "Error in news getting", throwable);
+                            Log.d(LOG_TAG, "Error in news getting", throwable);
                             hideProgress();
                         });
             }
