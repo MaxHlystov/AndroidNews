@@ -82,7 +82,6 @@ public class NewsGetter {
             }
         })
                 .map((String it) -> gson.fromJson(it, DTONewsResponse.class));
-
     }
 
     private NewsGetter() {
