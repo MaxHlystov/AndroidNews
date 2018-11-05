@@ -60,7 +60,7 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
         initViewsVariables();
-        configuration = new AppConfig(this);
+        configuration = new AppConfig(this.getApplicationContext());
         if (reloadButton != null) {
             reloadButton.setOnClickListener(v -> this.updateNews());
         }
@@ -97,11 +97,11 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         if (disposableNewsGetter != null) {
             disposableNewsGetter.dispose();
         }
-        super.onDestroy();
+        super.onStop();
     }
 
     private void initViewsVariables() {

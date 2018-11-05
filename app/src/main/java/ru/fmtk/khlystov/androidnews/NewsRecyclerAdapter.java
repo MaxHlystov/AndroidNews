@@ -21,8 +21,8 @@ import static android.text.TextUtils.isEmpty;
 
 public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder> {
 
-    private static int MAX_IMG_WIDTH = 800;
-    private static int MAX_IMG_HEIGHT = 600;
+    private static final int MAX_IMG_WIDTH = 800;
+    private static final int MAX_IMG_HEIGHT = 600;
 
     @NonNull
     private final IDateConverter dateConverter;
@@ -87,12 +87,12 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     private static class InternalDiffUtilCallback extends DiffUtil.Callback {
 
         @NonNull
-        private List<Article> oldArticles;
+        private final List<Article> oldArticles;
 
         @NonNull
-        private List<Article> newArticles;
+        private final List<Article> newArticles;
 
-        public InternalDiffUtilCallback(List<Article> oldArticles, List<Article> newArticles) {
+        public InternalDiffUtilCallback(@NonNull List<Article> oldArticles, @NonNull List<Article> newArticles) {
             this.oldArticles = oldArticles;
             this.newArticles = newArticles;
         }

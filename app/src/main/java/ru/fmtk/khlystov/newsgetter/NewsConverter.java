@@ -17,7 +17,7 @@ import ru.fmtk.khlystov.newsgetter.webapi.DTOResult;
 public class NewsConverter {
 
     @NonNull
-    private static final String NYTDateFormat = "yyyy-MM-dd'T'HH:mm:ssX";
+    private static final String NYT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssX";
 
     @NonNull
     private static final String IMAGE_FORMAT = "superJumbo";
@@ -75,7 +75,7 @@ public class NewsConverter {
     private static Date stringToDate(@Nullable String date) {
         if (date == null) return null;
         ParsePosition pos = new ParsePosition(0);
-        SimpleDateFormat simpledateformat = new SimpleDateFormat(NYTDateFormat);
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(NYT_DATE_FORMAT);
         return simpledateformat.parse(date, pos);
 
     }
