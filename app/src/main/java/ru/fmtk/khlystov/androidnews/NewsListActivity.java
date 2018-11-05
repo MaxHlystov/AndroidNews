@@ -38,9 +38,6 @@ public class NewsListActivity extends AppCompatActivity {
     private RecyclerView recyclerView = null;
 
     @Nullable
-    private Disposable disposableNewsGetter = null;
-
-    @Nullable
     private AppConfig configuration;
 
     @Nullable
@@ -88,9 +85,6 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.d(LOG_TAG, "On destroy activity " + this);
-        /*if (disposableNewsGetter != null) {
-            disposableNewsGetter.dispose();
-        }*/
         super.onDestroy();
     }
 
@@ -104,9 +98,6 @@ public class NewsListActivity extends AppCompatActivity {
             item.setChecked(configuration.isNeedFetchNewsFromOnlineFlag());
             configuration.save();
         }
-        if (disposableNewsGetter != null) {
-            disposableNewsGetter.dispose();
-        }
         updateNews();
     }
 
@@ -117,20 +108,20 @@ public class NewsListActivity extends AppCompatActivity {
                     getString(R.string.country_code),
                     configuration.isNeedFetchNewsFromOnlineFlag());
             if (newsObserver != null) {
-                disposableNewsGetter = newsObserver
+                newsObserver
                         .doOnSuccess(it -> {
                             Log.d(LOG_TAG, "Take news on : " + Thread.currentThread());
                         })
                         .subscribe((@Nullable NewsResponse newsResponse) -> {
-                            if (newsResponse != null) {
-                                hideProgress();
-                                updateNewsInAdapter(newsResponse.getArticles());
-                            }
-                        },
-                        throwable -> {
-                            Log.d(LOG_TAG, "Error in news getting", throwable);
-                            hideProgress();
-                        });
+                                    if (newsResponse != null) {
+                                        hideProgress();
+                                        updateNewsInAdapter(newsResponse.getArticles());
+                                    }
+                                },
+                                throwable -> {
+                                    Log.d(LOG_TAG, "Error in news getting", throwable);
+                                    hideProgress();
+                                });
             }
         }
     }
