@@ -12,19 +12,22 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import ru.fmtk.khlystov.androidnews.BuildConfig;
 
-public class OnlineNewsObserver implements INewsSupplier {
+public class OnlineNewsSupplier implements INewsSupplier {
+
+    @NonNull
+    private static final String LOG_TAG = "NewsAppOnlineSupplier";
+
     @NonNull
     private static final String FORMAT_NEWS_URL = "https://newsapi.org/v2/top-headlines?country=%s&apiKey=%s";
     private static final int BUFFER_SIZE = 8 * 1024;
 
-    @NonNull
-    private String countryCode;
 
-    public OnlineNewsObserver(String countryCode) {
+    @NonNull
+    private final String countryCode;
+
+    public OnlineNewsSupplier(@NonNull String countryCode) {
         this.countryCode = countryCode;
     }
 
@@ -33,6 +36,7 @@ public class OnlineNewsObserver implements INewsSupplier {
     public String get() throws IOException {
         URL url = new URL(String.format(FORMAT_NEWS_URL, countryCode, BuildConfig.APIkey));
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+        Log.d(LOG_TAG, "---------- Start to get online news ------------");
         try {
             urlConn.connect();
             if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -49,9 +53,8 @@ public class OnlineNewsObserver implements INewsSupplier {
         }
     }
 
-    private static long copyTo(@NonNull BufferedReader bufferedReader,
+    private static void copyTo(@NonNull BufferedReader bufferedReader,
                                @NonNull Writer out) throws IOException {
-        long charsCopied = 0;
         char[] buffer = new char[BUFFER_SIZE];
         while (true) {
             int chars = bufferedReader.read(buffer);
@@ -59,8 +62,6 @@ public class OnlineNewsObserver implements INewsSupplier {
                 break;
             }
             out.write(buffer, 0, chars);
-            charsCopied += chars;
         }
-        return charsCopied;
     }
 }

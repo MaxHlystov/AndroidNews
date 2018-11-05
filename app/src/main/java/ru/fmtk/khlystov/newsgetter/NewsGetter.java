@@ -32,7 +32,6 @@ public class NewsGetter {
 
     private static boolean online;
 
-    private static int callNumber = 0;
     @Nullable
     private static Single<NewsResponse> newsObserver = null;
 
@@ -57,29 +56,28 @@ public class NewsGetter {
         return newsObserver;
     }
 
-    @Nullable
     private static void setNewsObserver(@NonNull Context context,
                                         @Nullable String countryCode,
                                         boolean online) {
-        Log.d(LOG_TAG, "Init call number: " + Integer.toString(NewsGetter.callNumber));
-        NewsGetter.callNumber++;
+        Log.d(LOG_TAG, "Init call");
         NewsGetter.countryCode = countryCode == null ? COUNTRY_CODE_BY_DEFAULT : countryCode;
         NewsGetter.online = online;
         if (gson == null) gson = new Gson();
         INewsSupplier newsSupplier;
         if (online) {
-            newsSupplier = new OnlineNewsObserver(countryCode);
+            newsSupplier = new OnlineNewsSupplier(NewsGetter.countryCode);
         } else {
             newsSupplier = new OfflineNewsSupplier(context);
         }
-        newsObserver = Single.fromCallable(() -> newsSupplier.get())
+        newsObserver = Single.fromCallable(newsSupplier::get)
                 .doOnSuccess(it -> {
-                    Log.d(LOG_TAG, "Made call number: " + Integer.toString(NewsGetter.callNumber));
+                    Log.d(LOG_TAG, "An operation is complete");
                 })
                 // In accordance to the item 5 step 5 hw 4
                 .delay(IDLE_TIME_SECONDS, TimeUnit.SECONDS)
                 .map((String it) -> gson.fromJson(it, NewsResponse.class))
                 .subscribeOn(Schedulers.io())
+                .cache()
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }

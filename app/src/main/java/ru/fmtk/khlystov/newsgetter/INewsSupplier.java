@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface INewsSupplier {
     @Nullable
-    public String get() throws IOException;
+    String get() throws IOException;
 }

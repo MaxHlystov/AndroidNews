@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import java.io.IOException;
-import java.net.SocketException;
 
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -21,7 +20,7 @@ public class NewsApplication extends Application {
             if (e instanceof UndeliverableException) {
                 e = e.getCause();
             }
-            if ((e instanceof IOException) || (e instanceof SocketException)) {
+            if (e instanceof IOException) {
                 // fine, irrelevant network problem or API that throws on cancellation
                 return;
             }

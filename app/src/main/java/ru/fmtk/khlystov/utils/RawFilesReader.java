@@ -1,8 +1,6 @@
 package ru.fmtk.khlystov.utils;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
@@ -12,19 +10,17 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import ru.fmtk.khlystov.androidnews.R;
-
-public class AssetsReader {
+public class RawFilesReader {
 
     @NonNull
     private static final String LOG_TAG = "NewsAppAssetsReader";
 
-    private AssetsReader() {
-        throw new IllegalAccessError("AssetsReader's constructor invocation.");
+    private RawFilesReader() {
+        throw new IllegalAccessError("RawFilesReader's constructor invocation.");
     }
 
     @Nullable
-    public static String readFromAssetFile(@RawRes int rawId, Context context) {
+    public static String readFromRawFile(@RawRes int rawId, Context context) {
         StringBuilder returnString = new StringBuilder();
         InputStream fIn = null;
         InputStreamReader isr = null;

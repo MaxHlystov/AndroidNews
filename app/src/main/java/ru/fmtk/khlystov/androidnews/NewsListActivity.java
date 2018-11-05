@@ -20,7 +20,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
-import ru.fmtk.khlystov.NewsApplication;
 import ru.fmtk.khlystov.androidnews.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.appconfig.AppConfig;
 import ru.fmtk.khlystov.newsgetter.Article;
@@ -33,6 +32,9 @@ public class NewsListActivity extends AppCompatActivity {
 
     @NonNull
     private static final String LOG_TAG = "NewsAppNewsListActivity";
+
+    @Nullable
+    private Disposable disposableNewsGetter = null;
 
     @Nullable
     private RecyclerView recyclerView = null;
@@ -50,7 +52,7 @@ public class NewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_list);
         recyclerView = findViewById(R.id.activity_news_list__rec_view);
         progressBar = findViewById(R.id.activity_news_list__progress_bar);
-        configuration = new AppConfig(this);
+        configuration = new AppConfig(this.getApplicationContext());
         setRecyclerView();
         updateNews();
     }
@@ -83,6 +85,15 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        Log.d(LOG_TAG, "On stop activity " + this);
+        if (disposableNewsGetter != null) {
+            disposableNewsGetter.dispose();
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         Log.d(LOG_TAG, "On destroy activity " + this);
         super.onDestroy();
@@ -108,7 +119,7 @@ public class NewsListActivity extends AppCompatActivity {
                     getString(R.string.country_code),
                     configuration.isNeedFetchNewsFromOnlineFlag());
             if (newsObserver != null) {
-                newsObserver
+                disposableNewsGetter = newsObserver
                         .doOnSuccess(it -> {
                             Log.d(LOG_TAG, "Take news on : " + Thread.currentThread());
                         })
