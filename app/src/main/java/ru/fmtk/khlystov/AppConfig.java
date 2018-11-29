@@ -5,12 +5,9 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.ref.WeakReference;
+import ru.fmtk.khlystov.newsgetter.NewsSection;
 
 public class AppConfig {
-
-    @NonNull
-    public static final String DEFAULT_NEWS_SECTION = "home";
 
     @NonNull
     private static final String PREF_ALTERNATIVE_CONFIG = "ru.fmtk.khlystov.appconfig.alt_config";
@@ -22,28 +19,25 @@ public class AppConfig {
             PREF_ALTERNATIVE_CONFIG + ".news_section";
 
     @NonNull
-    private final WeakReference<SharedPreferences> sharedPreferencesWeakReference;
+    private final SharedPreferences sharedPreferences;
 
     private boolean needFetchNewsFromOnlineFlag = true;
 
-    @Nullable
-    private String news_section;
+    @NonNull
+    private NewsSection news_section;
 
     public AppConfig(@NonNull Context context) {
-        sharedPreferencesWeakReference = new WeakReference<>(
-                context.getSharedPreferences(PREF_ALTERNATIVE_CONFIG, Context.MODE_PRIVATE));
-        news_section = DEFAULT_NEWS_SECTION;
+        sharedPreferences = context.getSharedPreferences(PREF_ALTERNATIVE_CONFIG,
+                Context.MODE_PRIVATE);
+        news_section = NewsSection.getDefault();
         restore();
     }
 
     public synchronized void save() {
-        SharedPreferences shp = sharedPreferencesWeakReference.get();
-        if (shp != null) {
-            shp.edit()
-                    .putBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag)
-                    .putString(PREF_NEWS_SECTION, news_section)
-                    .apply();
-        }
+        sharedPreferences.edit()
+                .putBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag)
+                .putString(PREF_NEWS_SECTION, news_section.getID())
+                .apply();
     }
 
     public boolean isNeedFetchNewsFromOnlineFlag() {
@@ -55,20 +49,16 @@ public class AppConfig {
     }
 
     @NonNull
-    public String getNews_section() {
-        if (news_section != null) return news_section;
-        return DEFAULT_NEWS_SECTION;
+    public NewsSection getNewsSection() {
+        return news_section;
     }
 
-    public void setNews_section(@Nullable String news_section) {
-        this.news_section = news_section != null ? news_section : DEFAULT_NEWS_SECTION;
+    public void setNewsSection(@Nullable NewsSection news_section) {
+        this.news_section = news_section != null ? news_section : NewsSection.getDefault();
     }
 
     private void restore() {
-        SharedPreferences shp = sharedPreferencesWeakReference.get();
-        if (shp != null) {
-            needFetchNewsFromOnlineFlag = shp.getBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag);
-            news_section = shp.getString(PREF_NEWS_SECTION, DEFAULT_NEWS_SECTION);
-        }
+        needFetchNewsFromOnlineFlag = sharedPreferences.getBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag);
+        news_section = NewsSection.getByID(sharedPreferences.getString(PREF_NEWS_SECTION, ""));
     }
 }

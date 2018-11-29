@@ -17,13 +17,10 @@ import ru.fmtk.khlystov.newsgetter.webapi.DTOResult;
 public class NewsConverter {
 
     @NonNull
-    private static final String NYT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssX";
+    private static final String NYT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     @NonNull
     private static final String IMAGE_FORMAT = "superJumbo";
-
-    @Nullable
-    private static Source NYTSource;
 
     private NewsConverter() {
         throw new IllegalAccessError("NewsConverter's constructor invocation.");
@@ -31,32 +28,31 @@ public class NewsConverter {
 
     @NonNull
     public static NewsResponse convertToNewsResponse(@Nullable DTONewsResponse dtoNewsResponse) {
-        if (dtoNewsResponse != null) {
-            List<Article> articles = new ArrayList<>();
-            List<DTOResult> results = dtoNewsResponse.getResults();
-            if (results != null) {
-                for (DTOResult result : results) {
-                    articles.add(convertToArticle(result));
-                }
-            }
-            return new NewsResponse(dtoNewsResponse.getStatus(), articles.size(), articles);
+        if (dtoNewsResponse == null) {
+            return new NewsResponse(0, null);
         }
-        return new NewsResponse("Error", 0, null);
+        List<Article> articles = new ArrayList<>();
+        List<DTOResult> results = dtoNewsResponse.getResults();
+        if (results != null) {
+            for (DTOResult result : results) {
+                articles.add(convertToArticle(result));
+            }
+        }
+        return new NewsResponse(articles.size(), articles);
     }
 
     @NonNull
-    public static Article convertToArticle(@NonNull DTOResult dtoResult) {
-        if (NYTSource == null) NYTSource = new Source("NYT", "NYT");
-        return new Article(NYTSource,
-                dtoResult.getSection(),
-                dtoResult.getSubsection(),
-                null,
-                dtoResult.getTitle(),
-                dtoResult.getAbstract(),
-                dtoResult.getAbstract(),
-                dtoResult.getUrl(),
-                getNormalImageUrl(dtoResult.getMultimedia()),
-                stringToDate(dtoResult.getPublishedDate()));
+    private static Article convertToArticle(@NonNull DTOResult dtoResult) {
+        return new Article.Builder(
+                        NewsSection.getByID(dtoResult.getSection()),
+                        dtoResult.getTitle(),
+                        stringToDate(dtoResult.getPublishedDate()))
+                .setSubsection(dtoResult.getSubsection())
+                .setDescription(dtoResult.getAbstract())
+                .setContent(dtoResult.getAbstract())
+                .setUrl(dtoResult.getUrl())
+                .setUrlToImage(getNormalImageUrl(dtoResult.getMultimedia()))
+                .build();
     }
 
     @Nullable
@@ -73,7 +69,9 @@ public class NewsConverter {
 
     @Nullable
     private static Date stringToDate(@Nullable String date) {
-        if (date == null) return null;
+        if (date == null) {
+            return null;
+        }
         ParsePosition pos = new ParsePosition(0);
         SimpleDateFormat simpledateformat = new SimpleDateFormat(NYT_DATE_FORMAT);
         return simpledateformat.parse(date, pos);

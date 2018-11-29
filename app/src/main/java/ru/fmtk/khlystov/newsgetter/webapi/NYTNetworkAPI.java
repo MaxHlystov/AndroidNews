@@ -15,7 +15,7 @@ import ru.fmtk.khlystov.androidnews.BuildConfig;
 
 public class NYTNetworkAPI {
 
-    private static final int TIMEOUT_IN_SECONDS = 2;
+    private static final int TIMEOUT_IN_SECONDS = 10;
 
     @NonNull
     private static final String FORMAT_NEWS_URL = "https://api.nytimes.com";
@@ -29,17 +29,20 @@ public class NYTNetworkAPI {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        return retrofit.create(NYT_Retrofit_Endpoint.class)
+        return retrofit.create(NYTRetrofitEndpoint.class)
                 .getSection(section);
     }
 
     @NonNull
     private static OkHttpClient getHttpClient() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        return new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .addInterceptor(new APIKeyInterceptor(BuildConfig.NYT_APIkey))
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(new APIKeyInterceptor(BuildConfig.NYT_APIkey));
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            builder.addInterceptor(logging);
+        }
+        return builder
                 .connectTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .writeTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)

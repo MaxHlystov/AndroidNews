@@ -24,6 +24,7 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ru.fmtk.khlystov.androidnews.about.AboutActivity;
+import ru.fmtk.khlystov.newsgetter.NewsSection;
 import ru.fmtk.khlystov.utils.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.AppConfig;
 import ru.fmtk.khlystov.newsgetter.Article;
@@ -132,7 +133,7 @@ public class NewsListActivity extends AppCompatActivity {
             showStartLoading();
             Single<NewsResponse> newsObserver = NewsGetter.getNewsObserver(
                     this,
-                    configuration.getNews_section(),
+                    configuration.getNewsSection(),
                     configuration.isNeedFetchNewsFromOnlineFlag());
             if (newsObserver != null) {
                 disposableNewsGetter = newsObserver.subscribe(
@@ -205,14 +206,12 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void setNewsSectionsSpinner() {
         Spinner spinner = findViewById(R.id.activity_news_list__nyt_sections);
-        String[] sections = getResources().getStringArray(R.array.nyt_sections);
         if (spinner != null && configuration != null) {
             new NewsSectionsSpinner(this,
                     spinner,
-                    sections,
-                    configuration.getNews_section(),
-                    (String newsSection) -> {
-                        configuration.setNews_section(newsSection);
+                    configuration.getNewsSection(),
+                    (NewsSection newsSection) -> {
+                        configuration.setNewsSection(newsSection);
                         configuration.save();
                         updateNews();
                     }

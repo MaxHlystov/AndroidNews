@@ -7,11 +7,12 @@ import android.support.annotation.Nullable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.fmtk.khlystov.AppConfig;
+import ru.fmtk.khlystov.androidnews.BuildConfig;
 import ru.fmtk.khlystov.newsgetter.webapi.DTONewsResponse;
 import ru.fmtk.khlystov.newsgetter.webapi.NYTNetworkAPI;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class NewsGetter {
@@ -19,7 +20,7 @@ public class NewsGetter {
     private static final boolean THROW_ERROR = false;
 
     @Nullable
-    private static String section;
+    private static NewsSection section;
 
     private static boolean online;
 
@@ -28,32 +29,35 @@ public class NewsGetter {
 
     @Nullable
     public static Single<NewsResponse> getNewsObserver(@NonNull Context context,
-                                                       @Nullable String section,
+                                                       @NonNull NewsSection section,
                                                        boolean online) {
         if (newsObserver == null
                 || NewsGetter.section == null
-                || !NewsGetter.section.equals(section)
+                || !Objects.equals(NewsGetter.section, section)
                 || NewsGetter.online != online) {
             setNewsObserver(context, section, online);
         }
         return newsObserver;
     }
 
-    public static void setNewsObserver(@NonNull Context context,
-                                       @Nullable String section,
-                                       boolean online) {
-        NewsGetter.section = section == null ? AppConfig.DEFAULT_NEWS_SECTION : section;
+    private static void setNewsObserver(@NonNull Context context,
+                                        @NonNull NewsSection section,
+                                        boolean online) {
+        NewsGetter.section = section;
         NewsGetter.online = online;
         Single<DTONewsResponse> dTONewsObserver;
         if (online) {
-            dTONewsObserver = NYTNetworkAPI.createOnlineRequest(section);
+            dTONewsObserver = NYTNetworkAPI.createOnlineRequest(section.getID());
         } else {
             dTONewsObserver = new OfflineNewsSupplier(context).getOfflineNewsObserver();
         }
+        if (BuildConfig.DEBUG && THROW_ERROR) {
+            dTONewsObserver = dTONewsObserver.doOnSuccess(
+                    it -> {
+                        throw new IOException("Test exception!");
+                    });
+        }
         newsObserver = dTONewsObserver
-                .doOnSuccess(it -> {
-                    if (THROW_ERROR) throw new IOException("Test exception!");
-                })
                 .subscribeOn(Schedulers.io())
                 .map(NewsConverter::convertToNewsResponse)
                 .subscribeOn(Schedulers.computation())

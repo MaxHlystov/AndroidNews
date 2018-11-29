@@ -8,25 +8,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import ru.fmtk.khlystov.newsgetter.NewsSection;
+
 public class NewsSectionsSpinner {
 
     @NonNull
     private final Spinner spinner;
 
     @NonNull
-    private final String[] sections;
+    private final ArrayAdapter<NewsSection> adapter;
 
     @NonNull
-    private final ArrayAdapter<String> adapter;
+    private final NewsSection[] sections = NewsSection.values();
 
     private int currentPosition = -1;
     private boolean canProcessSelection = false;
 
-    public NewsSectionsSpinner(@NonNull Context context, @NonNull Spinner spinner,
-                               @NonNull String[] sections, @NonNull String currentValue,
+    public NewsSectionsSpinner(@NonNull Context context,
+                               @NonNull Spinner spinner,
+                               @NonNull NewsSection currentValue,
                                @Nullable OnSelectedItemChanged onSelectedItemChangedListener) {
         this.spinner = spinner;
-        this.sections = sections;
         this.adapter = new ArrayAdapter<>(context,
                 R.layout.news_sections_item, sections);
         adapter.setDropDownViewResource(R.layout.news_sections_selected_item);
@@ -38,7 +40,7 @@ public class NewsSectionsSpinner {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     if (currentPosition != position && canProcessSelection) {
                         currentPosition = position;
-                        String section = getCurrentSection();
+                        NewsSection section = getCurrentSection();
                         if (section != null) {
                             onSelectedItemChangedListener.process(section);
                         }
@@ -60,12 +62,12 @@ public class NewsSectionsSpinner {
     }
 
     @Nullable
-    public String getCurrentSection() {
-        if (currentPosition < 0 || currentPosition >= sections.length) return null;
+    public NewsSection getCurrentSection() {
+        if (currentPosition < 0 || currentPosition >= sections.length) { return null; }
         return sections[currentPosition];
     }
 
-    public void setCurrentSection(@NonNull String newsSection) {
+    public void setCurrentSection(@NonNull NewsSection newsSection) {
         for (int position = 0; position < adapter.getCount(); position++) {
             if (newsSection.equals(adapter.getItem(position))) {
                 spinner.setSelection(position);
@@ -76,6 +78,6 @@ public class NewsSectionsSpinner {
     }
 
     public interface OnSelectedItemChanged {
-        void process(@NonNull String section);
+        void process(@NonNull NewsSection section);
     }
 }
