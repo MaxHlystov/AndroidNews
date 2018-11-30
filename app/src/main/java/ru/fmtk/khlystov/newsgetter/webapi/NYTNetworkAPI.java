@@ -22,7 +22,7 @@ public class NYTNetworkAPI {
 
     @NonNull
     public static Single<DTONewsResponse> createOnlineRequest(String section) {
-        OkHttpClient okHttpClient = getHttpClient();
+        OkHttpClient okHttpClient = createOkHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FORMAT_NEWS_URL)
                 .client(okHttpClient)
@@ -34,11 +34,11 @@ public class NYTNetworkAPI {
     }
 
     @NonNull
-    private static OkHttpClient getHttpClient() {
+    private static OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .addInterceptor(new APIKeyInterceptor(BuildConfig.NYT_APIkey));
+                .addInterceptor(new APIKeyInterceptor(BuildConfig.NYT_API_KEY));
         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             builder.addInterceptor(logging);
         }
