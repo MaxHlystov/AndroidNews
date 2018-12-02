@@ -29,6 +29,9 @@ public class NewsDetailesActivity extends AppCompatActivity {
     @Nullable
     private Article article = null;
 
+    @Nullable
+    private WebView webView;
+
     public static void startActivity(@NonNull Context parent, @NonNull Article article) {
         Intent intent = new Intent(parent, NewsDetailesActivity.class);
         intent.putExtra(ARTICLE_OBJECT, article);
@@ -47,8 +50,15 @@ public class NewsDetailesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        article = getIntent().getParcelableExtra(ARTICLE_OBJECT);
-        fillContent();
+        webView = findViewById(R.id.activity_news_detailes__web_view);
+
+        if (savedInstanceState == null) {
+            article = getIntent().getParcelableExtra(ARTICLE_OBJECT);
+            fillContent();
+        }
+        else {
+            webView.restoreState(savedInstanceState);
+        }
     }
 
 
@@ -80,6 +90,14 @@ public class NewsDetailesActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (webView != null) {
+            webView.saveState(outState);
+        }
+    }
+
     private void goToArticleLink() {
         if (article != null) {
             String url = article.getUrl();
@@ -93,7 +111,6 @@ public class NewsDetailesActivity extends AppCompatActivity {
     }
 
     private void fillContent() {
-        WebView webView = findViewById(R.id.activity_news_detailes__web_view);
         webView.setWebViewClient(new WebViewClient());
         if (article != null) {
             String url = article.getUrl();

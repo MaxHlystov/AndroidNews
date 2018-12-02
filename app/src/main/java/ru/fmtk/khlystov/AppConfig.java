@@ -16,7 +16,7 @@ public class AppConfig {
             PREF_ALTERNATIVE_CONFIG + ".need_fetch_news_from_online_flag";
     @NonNull
     private static final String PREF_NEWS_SECTION =
-            PREF_ALTERNATIVE_CONFIG + ".news_section";
+            PREF_ALTERNATIVE_CONFIG + ".newsSection";
 
     @NonNull
     private final SharedPreferences sharedPreferences;
@@ -24,19 +24,19 @@ public class AppConfig {
     private boolean needFetchNewsFromOnlineFlag = true;
 
     @NonNull
-    private NewsSection news_section;
+    private NewsSection newsSection;
 
     public AppConfig(@NonNull Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_ALTERNATIVE_CONFIG,
                 Context.MODE_PRIVATE);
-        news_section = NewsSection.getDefault();
+        newsSection = NewsSection.getDefault();
         restore();
     }
 
     public synchronized void save() {
         sharedPreferences.edit()
                 .putBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag)
-                .putString(PREF_NEWS_SECTION, news_section.getID())
+                .putString(PREF_NEWS_SECTION, newsSection.getID())
                 .apply();
     }
 
@@ -50,15 +50,15 @@ public class AppConfig {
 
     @NonNull
     public NewsSection getNewsSection() {
-        return news_section;
+        return newsSection;
     }
 
     public void setNewsSection(@Nullable NewsSection news_section) {
-        this.news_section = news_section != null ? news_section : NewsSection.getDefault();
+        this.newsSection = news_section != null ? news_section : NewsSection.getDefault();
     }
 
     private void restore() {
         needFetchNewsFromOnlineFlag = sharedPreferences.getBoolean(PREF_NEED_FETCH_NEWS_FROM_ONLINE_FLAG, needFetchNewsFromOnlineFlag);
-        news_section = NewsSection.getByID(sharedPreferences.getString(PREF_NEWS_SECTION, ""));
+        newsSection = NewsSection.getByID(sharedPreferences.getString(PREF_NEWS_SECTION, ""));
     }
 }

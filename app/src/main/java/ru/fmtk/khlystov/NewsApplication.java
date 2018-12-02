@@ -17,6 +17,10 @@ public class NewsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        setGlobalRxErrorHandlers();
+    }
+
+    private void setGlobalRxErrorHandlers() {
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {
                 e = e.getCause();
