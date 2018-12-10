@@ -22,9 +22,11 @@ public class STDDateConverter implements IDateConverter {
     @NonNull
     @Override
     public String convert(@Nullable Date date) {
-        if(date == null) return "";
+        if (date == null) {
+            return "";
+        }
         Context context = weakContext.get();
-        if(context != null) {
+        if (context != null) {
             return DateUtils.getRelativeDateTimeString(context,
                     date.getTime(),
                     DateUtils.SECOND_IN_MILLIS,
