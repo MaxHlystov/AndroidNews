@@ -9,10 +9,6 @@ import android.view.View;
 
 public class IntentUtils {
 
-    private IntentUtils() {
-        throw new IllegalAccessError("Attempt to instantiate utility class.");
-    }
-
     public static void showIntent(@NonNull Context context,
                                   @NonNull View parent,
                                   @NonNull Intent intent,
@@ -43,4 +39,7 @@ public class IntentUtils {
         return intent;
     }
 
+    private IntentUtils() {
+        throw new IllegalAccessError("Attempt to instantiate utility class.");
+    }
 }

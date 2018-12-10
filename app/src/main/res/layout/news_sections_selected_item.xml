@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/text1"
+    style="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:padding="@dimen/news_sections_item__padding"
+    android:singleLine="true"
+    android:textSize="@dimen/news_sections_item__text_size"
+    tools:text="@tools:sample/lorem/random" />

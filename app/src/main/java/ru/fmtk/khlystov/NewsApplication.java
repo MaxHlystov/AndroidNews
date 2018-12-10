@@ -1,6 +1,7 @@
 package ru.fmtk.khlystov;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,12 +11,16 @@ import io.reactivex.plugins.RxJavaPlugins;
 
 public class NewsApplication extends Application {
 
+    @NonNull
     private static final String LOG_TAG = "NewsAppNewsApplication";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        setGlobalRxErrorHandlers();
+    }
 
+    private void setGlobalRxErrorHandlers() {
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {
                 e = e.getCause();

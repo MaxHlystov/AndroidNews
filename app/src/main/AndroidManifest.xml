@@ -23,7 +23,7 @@
             android:name=".NewsDetailesActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".about.AboutActivity"
             android:label="@string/activity_about__my_name" />
     </application>
 

@@ -1,4 +1,4 @@
-package ru.fmtk.khlystov.androidnews;
+package ru.fmtk.khlystov.androidnews.about;
 
 
 import android.support.annotation.NonNull;

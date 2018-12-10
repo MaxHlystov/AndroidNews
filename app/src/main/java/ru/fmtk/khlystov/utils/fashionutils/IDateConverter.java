@@ -1,4 +1,4 @@
-package ru.fmtk.khlystov.androidnews.fashionutils;
+package ru.fmtk.khlystov.utils.fashionutils;
 
 import android.support.annotation.Nullable;
 import android.support.annotation.NonNull;

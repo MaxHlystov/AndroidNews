@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.List;
 
-import ru.fmtk.khlystov.androidnews.fashionutils.IDateConverter;
+import ru.fmtk.khlystov.utils.fashionutils.IDateConverter;
 import ru.fmtk.khlystov.newsgetter.Article;
 import ru.fmtk.khlystov.utils.NetworkUtils;
 
@@ -44,16 +44,18 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == R.layout.news_item_even_layout) {
-            return new ViewHolderEven(
-                    LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.news_item_even_layout, parent, false));
+        int layoutId = viewType;
+        if (layoutId != R.layout.news_item_even_layout
+                && layoutId != R.layout.news_item_odd_layout) {
+            layoutId = R.layout.news_item_odd_layout;
         }
-        return ViewHolderOdd.create(parent);
+        return new ViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(
+                        layoutId, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NewsRecyclerAdapter.ViewHolder holder, int position) {
         holder.bind(articles.get(position), onClickListener, dateConverter);
     }
 
@@ -90,8 +92,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         @NonNull
         private final List<Article> newArticles;
 
-        public InternalDiffUtilCallback(@NonNull List<Article> oldArticles,
-                                        @NonNull List<Article> newArticles) {
+        public InternalDiffUtilCallback(@NonNull List<Article> oldArticles, @NonNull List<Article> newArticles) {
             this.oldArticles = oldArticles;
             this.newArticles = newArticles;
         }
@@ -127,23 +128,12 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         }
     }
 
-    protected abstract static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private ViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        protected abstract void bind(@NonNull Article article,
-                                     @Nullable OnItemClickListener onItemClickListener,
-                                     @Nullable IDateConverter dateConverter);
-    }
-
-    private static class ViewHolderEven extends ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
-        private final TextView source;
+        private final TextView subsection;
 
-        @NonNull
+        @Nullable
         private final TextView author;
 
         @NonNull
@@ -158,9 +148,9 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         @NonNull
         private final ImageView image;
 
-        private ViewHolderEven(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
-            source = itemView.findViewById(R.id.news_item_layout__source);
+            subsection = itemView.findViewById(R.id.news_item_layout__subsection);
             author = itemView.findViewById(R.id.news_item_layout__author);
             title = itemView.findViewById(R.id.news_item_layout__title);
             preview = itemView.findViewById(R.id.news_item_layout__preview);
@@ -168,78 +158,19 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
             image = itemView.findViewById(R.id.news_item_layout__image);
         }
 
-        @Override
         protected void bind(@NonNull Article article,
                             @Nullable OnItemClickListener onItemClickListener,
                             @Nullable IDateConverter dateConverter) {
-            String sourceName = article.getSourceName();
-            if (!isEmpty(sourceName)) {
-                source.setText(sourceName);
+            String sectionName = article.getSubsection();
+            if (!isEmpty(sectionName)) {
+                subsection.setText(sectionName);
+                subsection.setVisibility(View.VISIBLE);
             } else {
+                subsection.setVisibility(View.GONE);
+            }
+            if (author != null) {
                 author.setText(article.getAuthor());
             }
-            title.setText(article.getTitle());
-            preview.setText(article.getDescription());
-            if (dateConverter != null) {
-                Date publishedAt = article.getPublishedAt();
-                published.setText(dateConverter.convert(publishedAt));
-            }
-            if (isEmpty(article.getUrlToImage())) {
-                image.setVisibility(View.GONE);
-            } else {
-                image.setVisibility(View.VISIBLE);
-                NetworkUtils.getImgToImageView(article.getUrlToImage(),
-                        image, MAX_IMG_WIDTH, MAX_IMG_HEIGHT);
-            }
-            if (onItemClickListener != null) {
-                itemView.setOnClickListener(
-                        view -> onItemClickListener.onItemClick(itemView, article));
-            }
-        }
-    }
-
-    private static class ViewHolderOdd extends ViewHolder {
-
-        @NonNull
-        private final TextView source;
-
-        @NonNull
-        private final TextView title;
-
-        @NonNull
-        private final TextView preview;
-
-        @NonNull
-        private final TextView published;
-
-        @NonNull
-        private final ImageView image;
-
-        @NonNull
-        private static ViewHolder create(@NonNull ViewGroup parent) {
-            return new ViewHolderOdd(
-                    LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.news_item_odd_layout, parent, false));
-        }
-
-        private ViewHolderOdd(@NonNull View itemView) {
-            super(itemView);
-            source = itemView.findViewById(R.id.news_item_layout__source);
-            title = itemView.findViewById(R.id.news_item_layout__title);
-            preview = itemView.findViewById(R.id.news_item_layout__preview);
-            published = itemView.findViewById(R.id.news_item_layout__published);
-            image = itemView.findViewById(R.id.news_item_layout__image);
-        }
-
-        @Override
-        protected void bind(@NonNull Article article,
-                            @Nullable OnItemClickListener onItemClickListener,
-                            @Nullable IDateConverter dateConverter) {
-            String sourceName = article.getSourceName();
-            source.setText(isEmpty(sourceName) ?
-                    source.getContext().getString(R.string.news_recycler_adapter__source_undefined) :
-                    sourceName);
-
             title.setText(article.getTitle());
             preview.setText(article.getDescription());
             if (dateConverter != null) {

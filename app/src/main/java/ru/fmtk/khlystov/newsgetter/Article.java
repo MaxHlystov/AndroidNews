@@ -23,14 +23,20 @@ public class Article implements Parcelable {
         }
     };
 
-    @Nullable
-    private final Source source;
-
-    @Nullable
-    private final String author;
+    @NonNull
+    private final NewsSection section;
 
     @Nullable
     private final String title;
+
+    @Nullable
+    private final Date publishedAt;
+
+    @Nullable
+    private final String subsection;
+
+    @Nullable
+    private final String author;
 
     @Nullable
     private final String description;
@@ -44,31 +50,21 @@ public class Article implements Parcelable {
     @Nullable
     private final String urlToImage;
 
-    @Nullable
-    private final Date publishedAt;
-
-    public Article(@Nullable Source source,
-                   @Nullable String author,
-                   @Nullable String title,
-                   @Nullable String description,
-                   @Nullable String content,
-                   @Nullable String url,
-                   @Nullable String urlToImage,
-                   @Nullable Date publishedAt)
-
-    {
-        this.source = source;
-        this.author = author;
-        this.title = title;
-        this.description = description;
-        this.content = content;
-        this.url = url;
-        this.urlToImage = urlToImage;
-        this.publishedAt = publishedAt;
+    protected Article(@NonNull Builder builder) {
+        this.section = builder.section;
+        this.title = builder.title;
+        this.publishedAt = builder.publishedAt;
+        this.subsection = builder.subsection;
+        this.author = builder.author;
+        this.description = builder.description;
+        this.content = builder.content;
+        this.url = builder.url;
+        this.urlToImage = builder.urlToImage;
     }
 
     protected Article(@NonNull Parcel in) {
-        source = (Source) in.readValue(Source.class.getClassLoader());
+        section = NewsSection.getByID(in.readString());
+        subsection = in.readString();
         author = in.readString();
         title = in.readString();
         description = in.readString();
@@ -79,9 +75,14 @@ public class Article implements Parcelable {
         publishedAt = tmpPublishedAt != -1 ? new Date(tmpPublishedAt) : null;
     }
 
+    @NonNull
+    public NewsSection getSection() {
+        return section;
+    }
+
     @Nullable
-    public Source getSource() {
-        return source;
+    public String getSubsection() {
+        return subsection;
     }
 
     @Nullable
@@ -119,14 +120,6 @@ public class Article implements Parcelable {
         return publishedAt;
     }
 
-    @Nullable
-    public String getSourceName() {
-        if (source != null) {
-            return source.getName();
-        }
-        return null;
-    }
-
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) {
@@ -136,14 +129,14 @@ public class Article implements Parcelable {
             return false;
         }
         Article article = (Article) o;
-        return Objects.equals(getAuthor(), article.getAuthor()) &&
-                Objects.equals(getTitle(), article.getTitle()) &&
+        return Objects.equals(getTitle(), article.getTitle()) &&
+                Objects.equals(getSection(), article.getSection()) &&
                 Objects.equals(getPublishedAt(), article.getPublishedAt());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAuthor(), getTitle(), getPublishedAt());
+        return Objects.hash(getTitle(), getSection(), getPublishedAt());
     }
 
     @Override
@@ -153,7 +146,8 @@ public class Article implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeValue(source);
+        dest.writeString(section.getID());
+        dest.writeString(subsection);
         dest.writeString(author);
         dest.writeString(title);
         dest.writeString(description);
@@ -161,5 +155,86 @@ public class Article implements Parcelable {
         dest.writeString(url);
         dest.writeString(urlToImage);
         dest.writeLong(publishedAt != null ? publishedAt.getTime() : -1L);
+    }
+
+    public static class Builder {
+        @NonNull
+        private final NewsSection section;
+
+        @Nullable
+        private final String title;
+
+        @Nullable
+        private final Date publishedAt;
+
+        @Nullable
+        private String subsection;
+
+        @Nullable
+        private String author;
+
+        @Nullable
+        private String description;
+
+        @Nullable
+        private String content;
+
+        @Nullable
+        private String url;
+
+        @Nullable
+        private String urlToImage;
+
+
+        public Builder(@NonNull NewsSection section,
+                       @Nullable String title,
+                       @Nullable Date publishedAt)
+
+        {
+            this.section = section;
+            this.title = title;
+            this.publishedAt = publishedAt;
+        }
+
+        @NonNull
+        public Builder setSubsection(@Nullable String subsection) {
+            this.subsection = subsection;
+            return this;
+        }
+
+        @NonNull
+        public Builder setAuthor(@Nullable String author) {
+            this.author = author;
+            return this;
+        }
+
+        @NonNull
+        public Builder setDescription(@Nullable String description) {
+            this.description = description;
+            return this;
+        }
+
+        @NonNull
+        public Builder setContent(@Nullable String content) {
+            this.content = content;
+            return this;
+        }
+
+        @NonNull
+        public Builder setUrl(@Nullable String url) {
+            this.url = url;
+            return this;
+        }
+
+        @NonNull
+        public Builder setUrlToImage(@Nullable String urlToImage) {
+            this.urlToImage = urlToImage;
+            return this;
+        }
+
+        @NonNull
+        public Article build() {
+            return new Article(this);
+        }
     }
 }

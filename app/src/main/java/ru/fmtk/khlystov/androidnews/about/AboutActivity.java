@@ -1,4 +1,4 @@
-package ru.fmtk.khlystov.androidnews;
+package ru.fmtk.khlystov.androidnews.about;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import ru.fmtk.khlystov.androidnews.R;
 import ru.fmtk.khlystov.utils.IntentUtils;
 import ru.fmtkl.hlystov.imagedlistitem.ImagedTextView;
 
