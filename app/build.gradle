@@ -40,4 +40,8 @@ dependencies {
     implementation libraries.converter_gson
     implementation libraries.adapter_rxjava
     implementation libraries.logging_interceptor
+    implementation libraries.room
+    implementation libraries.room_rxjava
+    annotationProcessor libraries.room_compiler
+
 }

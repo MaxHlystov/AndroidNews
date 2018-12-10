@@ -2,7 +2,9 @@ package ru.fmtk.khlystov.newsgetter;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public enum NewsSection {
@@ -61,6 +63,16 @@ public enum NewsSection {
     @NonNull
     public static NewsSection getDefault() {
         return HOME;
+    }
+
+    @NonNull
+    public static List<String> getIds() {
+        NewsSection[] sectionsArray = NewsSection.values();
+        List<String> idsList = new ArrayList<>(sectionsArray.length);
+        for (NewsSection section : sectionsArray) {
+            idsList.add(section.getID().toLowerCase());
+        }
+        return idsList;
     }
 
     private static void initMap() {

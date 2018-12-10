@@ -20,4 +20,5 @@
     <string name="news_list_activity__adapter_set_error">Ошибка отображения новостей!</string>
     <string name="activity_news_list__reload">обновить</string>
     <string name="activity_news_list__error_loading_message">Во время загрузки новостей возникла ошибка! Попробуйте загрузить новости еще раз.</string>
+    <string name="activity_intro__welcome">Велкам!</string>
 </resources>

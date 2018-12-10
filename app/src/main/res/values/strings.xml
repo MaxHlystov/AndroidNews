@@ -22,4 +22,5 @@
     <string name="news_list_activity__adapter_set_error">Error in news draw!</string>
     <string name="activity_news_list__reload">reload</string>
     <string name="activity_news_list__error_loading_message">An error occurred while news loading! Try to reload news.</string>
+    <string name="activity_intro__welcome">Welcome!</string>
 </resources>

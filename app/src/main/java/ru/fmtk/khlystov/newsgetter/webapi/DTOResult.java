@@ -19,6 +19,9 @@ public class DTOResult implements Serializable {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("byline")
+    @Expose
+    private String byline;
     @SerializedName("abstract")
     @Expose
     private String _abstract;
@@ -33,12 +36,14 @@ public class DTOResult implements Serializable {
     private List<DTOMultimedium> multimedia;
     private final static long serialVersionUID = -8046644522326767844L;
 
-    public DTOResult(String section, String subsection, String title, String _abstract, String url,
-                     String publishedDate, List<DTOMultimedium> multimedia) {
+    public DTOResult(String section, String subsection, String title, String byline,
+                     String _abstract, String url,String publishedDate,
+                     List<DTOMultimedium> multimedia) {
         super();
         this.section = section;
         this.subsection = subsection;
         this.title = title;
+        this.byline = byline;
         this._abstract = _abstract;
         this.url = url;
         this.publishedDate = publishedDate;
@@ -68,6 +73,10 @@ public class DTOResult implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getByline() { return byline; }
+
+    public void setByline(String byline) { this.byline = byline; }
 
     public String getAbstract() {
         return _abstract;

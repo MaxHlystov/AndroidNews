@@ -25,4 +25,9 @@
     <dimen name="activity_news_list__reload_button_text_size">20sp</dimen>
     <dimen name="activity_news_list__line_margin">1dp</dimen>
     <dimen name="activity_news_list__line_thick">1dp</dimen>
+    <dimen name="activity_intro__welcome_text_size">24sp</dimen>
+    <dimen name="activity_intro__welcome_padding">8dp</dimen>
+    <dimen name="activity_intro_screenshot_padding">16dp</dimen>
+    <dimen name="activity_news_list__reload_button_margin">32dp</dimen>
+    <dimen name="activity_news_list__error_text_size">20sp</dimen>
 </resources>

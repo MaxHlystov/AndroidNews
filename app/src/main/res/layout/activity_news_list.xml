@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_news_list__item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +8,7 @@
 
     <Spinner
         android:id="@+id/activity_news_list__nyt_sections"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <View
@@ -17,14 +18,15 @@
         android:layout_margin="@dimen/activity_news_list__line_margin"
         android:background="@color/blue" />
 
-    <FrameLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/activity_news_list__rec_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <ProgressBar
             android:id="@+id/activity_news_list__progress_bar"
@@ -33,34 +35,30 @@
             android:layout_height="@dimen/activity_news_list__progress_bar_height"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:translationZ="@dimen/activity_news_list__progress_bar_z_index" />
+            android:translationZ="@dimen/activity_news_list__progress_bar_z_index"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-        <LinearLayout
-            android:id="@+id/activity_news_list__error"
+        <TextView
+            android:id="@+id/activity_news_list__error_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/activity_news_list__error_loading_message"
+            android:textSize="@dimen/activity_news_list__error_text_size"
+            android:textColor="@color/red"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/activity_news_list__error_text"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/activity_news_list__error_loading_message" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/activity_news_list__reload_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/activity_news_list__reload_button_margin"
+            android:src="@drawable/ic_refresh" />
 
-            <Button
-                android:id="@+id/activity_news_list__reload_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableStart="@drawable/ic_refresh"
-                android:text="@string/activity_news_list__reload"
-                android:textSize="@dimen/activity_news_list__reload_button_text_size" />
-
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>
 
