@@ -159,13 +159,13 @@ public class Article implements Parcelable {
 
     public static class Builder {
         @NonNull
-        private final NewsSection section;
+        private NewsSection section;
 
         @Nullable
-        private final String title;
+        private String title;
 
         @Nullable
-        private final Date publishedAt;
+        private Date publishedAt;
 
         @Nullable
         private String subsection;
@@ -186,6 +186,18 @@ public class Article implements Parcelable {
         private String urlToImage;
 
 
+        public Builder(@NonNull Article article) {
+            this.section = article.getSection();
+            this.title = article.getTitle();
+            this.publishedAt = article.getPublishedAt();
+            setSubsection(article.getSubsection());
+            setAuthor(article.getAuthor());
+            setDescription(article.getDescription());
+            setContent(article.getContent());
+            setUrl(article.getUrl());
+            setUrlToImage(article.getUrlToImage());
+        }
+
         public Builder(@NonNull NewsSection section,
                        @Nullable String title,
                        @Nullable Date publishedAt)
@@ -193,6 +205,18 @@ public class Article implements Parcelable {
         {
             this.section = section;
             this.title = title;
+            this.publishedAt = publishedAt;
+        }
+
+        public void setSection(@NonNull NewsSection section) {
+            this.section = section;
+        }
+
+        public void setTitle(@Nullable String title) {
+            this.title = title;
+        }
+
+        public void setPublishedAt(@Nullable Date publishedAt) {
             this.publishedAt = publishedAt;
         }
 

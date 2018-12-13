@@ -23,4 +23,15 @@
     <string name="activity_news_list__reload">reload</string>
     <string name="activity_news_list__error_loading_message">An error occurred while news loading! Try to reload news.</string>
     <string name="activity_intro__welcome">Welcome!</string>
+    <string name="activity_news_detailes_layout__error_loading_message">Error to load the article!</string>
+    <string name="main_menu__edit">Edit news</string>
+    <string name="detailed_news_menu__delete">Delete news</string>
+    <string name="activity_news_detailes_layout__error_delete_article">Error to delete article.</string>
+    <string name="detailed_news_menu__save_news">Save news</string>
+    <string name="news_detailes_activity__error_saving_article">Error saving article. Try once again.</string>
+    <string name="activity_edit_news__author">Author</string>
+    <string name="activity_edit_news__title">Title</string>
+    <string name="activity_edit_news__description">Description</string>
+    <string name="activity_edit_news__content">Content</string>
+    <string name="activity_edit_news__published">Published at</string>
 </resources>

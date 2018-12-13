@@ -12,9 +12,94 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <WebView
-        android:id="@+id/activity_news_detailes__web_view"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:id="@+id/activity_news_detailes_layout__article"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/activity_news_detailes_layout__card_padding">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/activity_news_detailes_layout__image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="@dimen/activity_news_detailes_layout__img_margin"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/news_image"
+                    android:scaleType="centerInside"
+                    tools:src="@tools:sample/backgrounds/scenic[7]" />
+
+                <TextView
+                    android:id="@+id/activity_news_detailes_layout__author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_news_detailes_layout__image"
+                    android:textSize="@dimen/activity_news_detailes_layout__author_text_size"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/activity_news_detailes_layout__title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_news_detailes_layout__author"
+                    android:layout_margin="@dimen/activity_news_detailes_layout__content_padding"
+                    android:textSize="@dimen/activity_news_detailes_layout__title_text_size"
+                    android:textStyle="bold"
+                    tools:text="@tools:sample/lorem" />
+
+                <TextView
+                    android:id="@+id/activity_news_detailes_layout__published"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_news_detailes_layout__title"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/activity_news_detailes_layout__published_at_margin_top"
+                    android:textSize="@dimen/activity_news_detailes_layout__date_text_size"
+                    tools:text="@tools:sample/date/ddmmyy" />
+
+                <TextView
+                    android:id="@+id/activity_news_detailes_layout__content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_news_detailes_layout__published"
+                    android:layout_margin="@dimen/activity_news_detailes_layout__content_padding"
+                    android:textSize="@dimen/activity_news_detailes_layout__content_text_size"
+                    tools:text="@tools:sample/lorem/random" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/activity_news_detailes_layout__progress_bar"
+            style="@android:style/Widget.ProgressBar.Large"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_news_detailes_layout__progress_bar_height"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:translationZ="@dimen/activity_news_detailes_layout__progress_bar_z_index"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/activity_news_detailes_layout__error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/activity_news_detailes_layout__error_loading_message"
+            android:textColor="@color/red"
+            android:textSize="@dimen/activity_news_detailes_layout__error_text_size"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

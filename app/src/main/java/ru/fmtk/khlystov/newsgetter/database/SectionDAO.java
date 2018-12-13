@@ -27,7 +27,7 @@ public interface SectionDAO {
     int deleteAll();
 
     @Query("SELECT * FROM news_section WHERE web_id = :web_id LIMIT 1")
-    List<SectionEntity> findByWebId(String web_id);
+    SectionEntity findByWebId(String web_id);
 
     @Query("SELECT * FROM news_section WHERE web_id in(:webIds)")
     List<SectionEntity> findAllByWebIds(List<String> webIds);

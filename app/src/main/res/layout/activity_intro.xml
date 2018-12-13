@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:contentDescription="@string/url_github"
-        android:layout_margin="@dimen/activity_intro_screenshot_padding"
+        android:layout_margin="@dimen/activity_intro__screenshot_padding"
         android:src="@drawable/app_screenshot"/>
 
     <TextView

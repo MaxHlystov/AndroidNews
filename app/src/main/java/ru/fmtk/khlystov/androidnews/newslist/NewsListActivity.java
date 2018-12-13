@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,8 +29,12 @@ import io.reactivex.disposables.Disposable;
 import ru.fmtk.khlystov.androidnews.NewsDetailesActivity;
 import ru.fmtk.khlystov.androidnews.R;
 import ru.fmtk.khlystov.androidnews.about.AboutActivity;
+import ru.fmtk.khlystov.newsgetter.ArticleIdentificator;
 import ru.fmtk.khlystov.newsgetter.NewsSection;
-import ru.fmtk.khlystov.newsgetter.NewsStorage;
+import ru.fmtk.khlystov.newsgetter.NewsGetway;
+import ru.fmtk.khlystov.utils.IntentUtils;
+import ru.fmtk.khlystov.utils.LoadStateControl;
+import ru.fmtk.khlystov.utils.RxJavaUtils;
 import ru.fmtk.khlystov.utils.fashionutils.STDDateConverter;
 import ru.fmtk.khlystov.AppConfig;
 import ru.fmtk.khlystov.newsgetter.Article;
@@ -42,6 +45,9 @@ public class NewsListActivity extends AppCompatActivity {
 
     @NonNull
     private static final String LOG_TAG = "NewsAppNewsListActivity";
+
+    @Nullable
+    private LoadStateControl loadStateControl = null;
 
     @Nullable
     private RecyclerView recyclerView = null;
@@ -56,13 +62,7 @@ public class NewsListActivity extends AppCompatActivity {
     private AppConfig configuration;
 
     @Nullable
-    private ProgressBar progressBar;
-
-    @Nullable
     private FloatingActionButton reloadFAB;
-
-    @Nullable
-    private TextView errorTextView;
 
     public static void startActivity(@NonNull Context parent) {
         Intent intent = new Intent(parent, NewsListActivity.class);
@@ -73,13 +73,13 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-        initViewsVariables();
         configuration = AppConfig.getAppConfig(this.getApplicationContext());
-        if (reloadFAB != null) {
-            reloadFAB.setOnClickListener(v -> this.updateNewsFromNYT());
-        }
-        setNewsSectionsSpinner();
-        setRecyclerView();
+        initViewsVariables();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         readNews();
     }
 
@@ -94,7 +94,7 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu__about_item:
-                onMainMenuAboutItemClicked(item);
+                AboutActivity.startActivity(this);
                 break;
             default:
                 Log.e(LOG_TAG, String.format("Unexpected option: %s", item.getTitle()));
@@ -105,29 +105,38 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        disposeSubscription(disposableUpdateNews);
+        RxJavaUtils.dispose(disposableUpdateNews);
         disposableUpdateNews = null;
-        disposeSubscription(disposableReadNewsChanged);
+        RxJavaUtils.dispose(disposableReadNewsChanged);
         disposableReadNewsChanged = null;
         super.onStop();
     }
 
     private void initViewsVariables() {
         recyclerView = findViewById(R.id.activity_news_list__rec_view);
-        progressBar = findViewById(R.id.activity_news_list__progress_bar);
+        ProgressBar progressBar = findViewById(R.id.activity_news_list__progress_bar);
+        TextView errorTextView = findViewById(R.id.activity_news_list__error_text);
         reloadFAB = findViewById(R.id.activity_news_list__reload_button);
-        errorTextView = findViewById(R.id.activity_news_list__error_text);
-    }
-
-    private void onMainMenuAboutItemClicked(@NonNull MenuItem item) {
-        AboutActivity.startActivity(this);
+        if (progressBar != null && errorTextView != null && reloadFAB != null) {
+            loadStateControl = new LoadStateControl(
+                    reloadFAB,
+                    progressBar,
+                    errorTextView);
+        }
+        if (reloadFAB != null) {
+            reloadFAB.setOnClickListener(v -> this.updateNewsFromNYT());
+        }
+        setNewsSectionsSpinner();
+        setRecyclerView();
     }
 
     private void updateNewsFromNYT() {
         if (configuration != null) {
-            showStartLoading();
-            disposeSubscription(disposableUpdateNews);
-            Completable completable = NewsStorage.updateNewsFromNYT(
+            if (loadStateControl != null) {
+                loadStateControl.showStartLoading();
+            }
+            RxJavaUtils.dispose(disposableUpdateNews);
+            Completable completable = NewsGetway.updateNewsFromNYT(
                     this,
                     configuration.getNewsSection())
                     .observeOn(AndroidSchedulers.mainThread());
@@ -138,14 +147,16 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void onLoadingComplete() {
-        showCompletLoading();
+        if (loadStateControl != null) {
+            loadStateControl.showCompletLoading();
+        }
         readNews();
     }
 
     private void readNews() {
         if (configuration != null) {
-            disposeSubscription(disposableReadNewsChanged);
-            Single<List<Article>> newsObserver = NewsStorage.getArticles(this)
+            RxJavaUtils.dispose(disposableReadNewsChanged);
+            Single<List<Article>> newsObserver = NewsGetway.getArticles(this)
                     .observeOn(AndroidSchedulers.mainThread());
             disposableReadNewsChanged = newsObserver.subscribe(
                     this::showNews,
@@ -153,22 +164,10 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    private void showStartLoading() {
-        setViewVisibility(errorTextView, View.GONE);
-        setViewVisibility(progressBar, View.VISIBLE);
-        setViewVisibility(reloadFAB, View.GONE);
-    }
-
-    private void showCompletLoading() {
-        setViewVisibility(errorTextView, View.GONE);
-        setViewVisibility(progressBar, View.GONE);
-        setViewVisibility(reloadFAB, View.VISIBLE);
-    }
-
     private void showNews(@Nullable List<Article> articles) {
-        setViewVisibility(errorTextView, View.GONE);
-        setViewVisibility(progressBar, View.GONE);
-        setViewVisibility(reloadFAB, View.VISIBLE);
+        if (loadStateControl != null) {
+            loadStateControl.showCompletLoading();
+        }
         if (articles != null) {
             updateNewsInAdapter(articles);
         }
@@ -176,14 +175,9 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void showErrorLoading(@NonNull Throwable throwable) {
         Log.e(LOG_TAG, "Error in news getting", throwable);
-        setViewVisibility(progressBar, View.GONE);
-        setViewVisibility(errorTextView, View.VISIBLE);
-        setViewVisibility(reloadFAB, View.VISIBLE);
-    }
-
-    private void setViewVisibility(@Nullable View view, int visibility) {
-        if (view != null) {
-            view.setVisibility(visibility);
+        if (loadStateControl != null) {
+            loadStateControl.showErrorLoading(
+                    getString(R.string.activity_news_list__error_loading_message));
         }
     }
 
@@ -192,7 +186,8 @@ public class NewsListActivity extends AppCompatActivity {
             NewsRecyclerAdapter newsRecyclerAdapter = (NewsRecyclerAdapter) recyclerView.getAdapter();
             newsRecyclerAdapter.replaceData(articlesList);
         } else if (recyclerView != null) {
-            Snackbar.make(recyclerView, R.string.news_list_activity__adapter_set_error, Snackbar.LENGTH_LONG).show();
+            IntentUtils.showSnackbar(recyclerView,
+                    getString(R.string.news_list_activity__adapter_set_error));
         }
     }
 
@@ -205,7 +200,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void handleOnNewsItemClick(@NonNull View view, @NonNull Article article) {
-        NewsDetailesActivity.startActivity(this, article);
+        NewsDetailesActivity.startViewActivity(this, new ArticleIdentificator(article));
     }
 
     private void setRecyclerView() {
@@ -233,12 +228,6 @@ public class NewsListActivity extends AppCompatActivity {
                         updateNewsFromNYT();
                     }
             );
-        }
-    }
-
-    private void disposeSubscription(@Nullable Disposable disposable) {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
         }
     }
 }

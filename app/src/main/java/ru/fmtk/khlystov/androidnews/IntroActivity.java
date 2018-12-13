@@ -1,5 +1,6 @@
 package ru.fmtk.khlystov.androidnews;
 
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +15,9 @@ import ru.fmtk.khlystov.androidnews.newslist.NewsListActivity;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private static int SWITCH_TO_THE_SECOND_ACTIVITY_SECONDS_DELAY = 3;
+    private static final int SWITCH_TO_THE_SECOND_ACTIVITY_SECONDS_DELAY = 3;
 
+    @Nullable
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -47,12 +49,12 @@ public class IntroActivity extends AppCompatActivity {
         Disposable disposable = Completable.complete()
                 .delay(SWITCH_TO_THE_SECOND_ACTIVITY_SECONDS_DELAY, TimeUnit.SECONDS)
                 .subscribe(this::switchToTheSecondActivity);
-        compositeDisposable.add(disposable);
+        if (compositeDisposable != null) {
+            compositeDisposable.add(disposable);
+        }
 
         View view = findViewById(R.id.activity_intro__main_view);
-        view.setOnClickListener((View v) -> {
-            switchToTheSecondActivity();
-        });
+        view.setOnClickListener((View v) -> switchToTheSecondActivity());
     }
 
     private void switchToTheSecondActivity() {

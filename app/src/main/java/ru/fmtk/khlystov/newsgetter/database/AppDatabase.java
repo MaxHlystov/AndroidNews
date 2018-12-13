@@ -13,11 +13,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.fmtk.khlystov.androidnews.BuildConfig;
 import ru.fmtk.khlystov.newsgetter.NewsSection;
 
 @Database(entities = {NewsEntity.class, SectionEntity.class},
-        version = 1)
+        version = 1,
+        exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     @NonNull
@@ -58,7 +58,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final SectionDAO newsSectionDAO;
-        List<String> newsSectionsWebIds;
+        private final List<String> newsSectionsWebIds;
 
         public PopulateDbAsync(AppDatabase instance, List<String> newsSectionsWebIds) {
             newsSectionDAO = instance.newsSectionDAO();

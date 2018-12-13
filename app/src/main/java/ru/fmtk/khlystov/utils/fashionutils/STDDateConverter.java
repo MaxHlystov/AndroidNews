@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 
 import java.lang.ref.WeakReference;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE;
@@ -33,5 +35,22 @@ public class STDDateConverter implements IDateConverter {
                     .toString();
         }
         return date.toString();
+    }
+
+    @Nullable
+    public static Date unconvert(@Nullable String dateString,
+                                    @Nullable String pattern) {
+        if (dateString == null) {
+            return null;
+        }
+        ParsePosition pos = new ParsePosition(0);
+        SimpleDateFormat simpledateformat;
+        if(pattern == null) {
+            simpledateformat = new SimpleDateFormat();
+        } else {
+            simpledateformat = new SimpleDateFormat(pattern);
+        }
+        return simpledateformat.parse(dateString, pos);
+
     }
 }

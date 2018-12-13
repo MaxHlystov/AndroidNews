@@ -13,7 +13,13 @@ import ru.fmtk.khlystov.newsgetter.NewsSection;
 public class DBNewsConverter {
 
     @NonNull
-    public static NewsAndSectionEntity articleToDB(@NonNull Article article) {
+    public static NewsAndSectionEntity articleToNewsAndSectionEntity(@NonNull Article article) {
+        return new NewsAndSectionEntity(articleToNewsEntity(article),
+                article.getSection().getID());
+    }
+
+    @NonNull
+    public static NewsEntity articleToNewsEntity(@NonNull Article article) {
         NewsEntity newsEntity = new NewsEntity();
         newsEntity.title = article.getTitle();
         newsEntity.publishedAt = article.getPublishedAt();
@@ -23,7 +29,7 @@ public class DBNewsConverter {
         newsEntity.content = article.getContent();
         newsEntity.url = article.getUrl();
         newsEntity.urlToImage = article.getUrlToImage();
-        return new NewsAndSectionEntity(newsEntity, article.getSection().getID());
+        return newsEntity;
     }
 
     @NonNull
@@ -34,6 +40,7 @@ public class DBNewsConverter {
                 newsSection,
                 newsEntity.title,
                 newsEntity.publishedAt)
+                .setAuthor(newsEntity.author)
                 .setSubsection(newsEntity.subsection)
                 .setDescription(newsEntity.description)
                 .setContent(newsEntity.content)
@@ -49,7 +56,7 @@ public class DBNewsConverter {
         return convertList(
                 articles,
                 (Article article) -> {
-                    NewsAndSectionEntity nse = articleToDB(article);
+                    NewsAndSectionEntity nse = articleToNewsAndSectionEntity(article);
                     nse.setSection(sectionToDB.convert(article.getSection()));
                     return nse;
                 });

@@ -10,6 +10,7 @@ android {
         versionName versions.name
         buildConfigField 'String', 'NYT_API_KEY', '"eeb4255a249346bb9ced15d12a3a5c74"'
 
+
     }
     buildTypes {
         release {
