@@ -10,6 +10,7 @@ android {
         versionName versions.name
         buildConfigField 'String', 'NYT_API_KEY', '"eeb4255a249346bb9ced15d12a3a5c74"'
 
+
     }
     buildTypes {
         release {
@@ -40,4 +41,8 @@ dependencies {
     implementation libraries.converter_gson
     implementation libraries.adapter_rxjava
     implementation libraries.logging_interceptor
+    implementation libraries.room
+    implementation libraries.room_rxjava
+    annotationProcessor libraries.room_compiler
+
 }

@@ -16,7 +16,7 @@ public class IntentUtils {
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(intent);
         } else {
-            Snackbar.make(parent, errorMessage, Snackbar.LENGTH_LONG).show();
+            showSnackbar(parent, errorMessage);
         }
     }
 
@@ -37,6 +37,11 @@ public class IntentUtils {
         String mailto = "mailto:" + to + "?subject=" + subject + "&body=" + msg;
         intent.setData(Uri.parse(mailto));
         return intent;
+    }
+
+    public static void showSnackbar(@NonNull View parent, @NonNull String message) {
+        Snackbar.make(parent, message, Snackbar.LENGTH_LONG).show();
+
     }
 
     private IntentUtils() {

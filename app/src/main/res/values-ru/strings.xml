@@ -20,4 +20,16 @@
     <string name="news_list_activity__adapter_set_error">Ошибка отображения новостей!</string>
     <string name="activity_news_list__reload">обновить</string>
     <string name="activity_news_list__error_loading_message">Во время загрузки новостей возникла ошибка! Попробуйте загрузить новости еще раз.</string>
+    <string name="activity_intro__welcome">Велкам!</string>
+    <string name="activity_news_detailes_layout__error_loading_message">Ошибка загрузки новости для отображения!</string>
+    <string name="main_menu__edit">Редактировать новость</string>
+    <string name="detailed_news_menu__delete">Удалить новость</string>
+    <string name="activity_news_detailes_layout__error_delete_article">Ошибка удаления новости.</string>
+    <string name="detailed_news_menu__save_news">Сохранить новость</string>
+    <string name="news_detailes_activity__error_saving_article">Ошибка сохранения статьи. Попробуйте еще раз.</string>
+    <string name="activity_edit_news__author">Автор</string>
+    <string name="activity_edit_news__title">Заголовок</string>
+    <string name="activity_edit_news__description">Описание</string>
+    <string name="activity_edit_news__content">Текст статьи</string>
+    <string name="activity_edit_news__published">Дата публикации</string>
 </resources>

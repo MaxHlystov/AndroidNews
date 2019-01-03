@@ -8,7 +8,7 @@
     <dimen name="half_margin">8dp</dimen>
     <dimen name="thick_line">2dp</dimen>
     <dimen name="thin_line">1dp</dimen>
-    <dimen name="activity_news_list__space_between_items">4dp</dimen>
+
     <dimen name="news_item_layout__title_text_size">14sp</dimen>
     <dimen name="news_item_layout_author_text_size">12sp</dimen>
     <dimen name="news_item_layout__date_text_size">10sp</dimen>
@@ -16,13 +16,40 @@
     <dimen name="news_item_layout__date_margin_end">16sp</dimen>
     <dimen name="news_item_layout__text_img_margin">16dp</dimen>
     <dimen name="news_item_layout__card_padding">8dp</dimen>
-    <dimen name="detailed_news_action_bar__elevation">4dp</dimen>
     <dimen name="news_item_layout__preview_text_size">12sp</dimen>
+
+    <dimen name="detailed_news_action_bar__elevation">4dp</dimen>
+
     <dimen name="news_sections_item__text_size">22sp</dimen>
     <dimen name="news_sections_item__padding">5dp</dimen>
+
+    <dimen name="activity_news_list__space_between_items">4dp</dimen>
     <dimen name="activity_news_list__progress_bar_height">80dp</dimen>
     <dimen name="activity_news_list__progress_bar_z_index">2dp</dimen>
     <dimen name="activity_news_list__reload_button_text_size">20sp</dimen>
     <dimen name="activity_news_list__line_margin">1dp</dimen>
     <dimen name="activity_news_list__line_thick">1dp</dimen>
+    <dimen name="activity_news_list__reload_button_margin">32dp</dimen>
+    <dimen name="activity_news_list__error_text_size">20sp</dimen>
+
+    <dimen name="activity_intro__welcome_text_size">24sp</dimen>
+    <dimen name="activity_intro__welcome_padding">8dp</dimen>
+    <dimen name="activity_intro__screenshot_padding">16dp</dimen>
+
+    <dimen name="activity_news_detailes_layout__title_text_size">24sp</dimen>
+    <dimen name="activity_news_detailes_layout__author_text_size">14sp</dimen>
+    <dimen name="activity_news_detailes_layout__date_text_size">10sp</dimen>
+    <dimen name="activity_news_detailes_layout__content_text_size">14sp</dimen>
+    <dimen name="activity_news_detailes_layout__img_margin">8dp</dimen>
+    <dimen name="activity_news_detailes_layout__published_at_margin_top">12dp</dimen>
+    <dimen name="activity_news_detailes_layout__left_column_padding">8dp</dimen>
+    <dimen name="activity_news_detailes_layout__content_padding">8dp</dimen>
+    <dimen name="activity_news_detailes_layout__title_margin_top">18dp</dimen>
+    <dimen name="activity_news_detailes_layout__title_margin_bottom">10dp</dimen>
+    <dimen name="activity_news_detailes_layout__card_padding">8dp</dimen>
+    <dimen name="activity_news_detailes_layout__progress_bar_z_index">2dp</dimen>
+    <dimen name="activity_news_detailes_layout__progress_bar_height">80dp</dimen>
+    <dimen name="activity_news_detailes_layout__error_text_size">20sp</dimen>
+    <dimen name="activity_edit_news__caption_text_size">8sp</dimen>
+
 </resources>

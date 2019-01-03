@@ -2,9 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/detailed_news_menu__save_item"
+        android:icon="@drawable/ic_check_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/detailed_news_menu__save_news">
+    </item>
+    <item
         android:id="@+id/detailed_news_menu__share"
         android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/share_link"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/detailed_news_menu__edit_item"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/share_link">
+        android:title="@string/main_menu__edit">
     </item>
+    <item
+        android:id="@+id/detailed_news_menu__delete_item"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/detailed_news_menu__delete"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -38,15 +38,12 @@ public class RawFilesReader {
             return null;
         } finally {
             try {
-                if (isr != null) {
+                if (isr != null)
                     isr.close();
-                }
-                if (fIn != null) {
+                if (fIn != null)
                     fIn.close();
-                }
-                if (input != null) {
+                if (input != null)
                     input.close();
-                }
             } catch (Exception e2) {
                 Log.e(LOG_TAG, "Error closing asset file", e2);
             }

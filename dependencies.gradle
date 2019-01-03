@@ -15,7 +15,8 @@ ext.versions = [
         retrofit           : '2.4.0',
         converter_gson     : '2.4.0',
         adapter_rxjava     : '1.0.0',
-        logging_interceptor: '3.11.0'
+        logging_interceptor: '3.11.0',
+        room               : '1.1.1'
 ]
 
 ext.gradlePlugins = [
@@ -34,5 +35,9 @@ ext.libraries = [
         retrofit           : "com.squareup.retrofit2:retrofit:$versions.retrofit",
         converter_gson     : "com.squareup.retrofit2:converter-gson:$versions.converter_gson",
         adapter_rxjava     : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.adapter_rxjava",
-        logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.logging_interceptor"
+        logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.logging_interceptor",
+        room               : "android.arch.persistence.room:runtime:$versions.room",
+        room_compiler      : "android.arch.persistence.room:compiler:$versions.room",
+        room_rxjava        : "android.arch.persistence.room:rxjava2:$versions.room"
+
 ]
