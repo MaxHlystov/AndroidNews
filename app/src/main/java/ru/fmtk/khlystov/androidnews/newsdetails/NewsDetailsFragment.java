@@ -60,6 +60,8 @@ public class NewsDetailsFragment extends Fragment
 
     private boolean editMode = false;
 
+    private boolean deletedArticle = false;
+
     @Nullable
     private IDataBus<AppMessages, ArticleIdentificator> dataBus = null;
 
@@ -159,7 +161,7 @@ public class NewsDetailsFragment extends Fragment
         RxJavaUtils.disposeIfNotNull(disposableUpdateNews);
         disposableUpdateNews = null;
         setBackButtonVisible(false);
-        if (editMode && dataBus != null && articleId != null) {
+        if (editMode && !deletedArticle && dataBus != null && articleId != null) {
             dataBus.sendToAll(this, AppMessages.OPEN, articleId);
         }
         unsubscribeDataBus();
@@ -350,6 +352,7 @@ public class NewsDetailsFragment extends Fragment
     }
 
     private void onArticleDeleted() {
+        deletedArticle = true;
         ContextUtils.popFragment(getActivity());
         if (articleId != null && dataBus != null) {
             dataBus.sendToAll(this, AppMessages.DELETE, articleId);
