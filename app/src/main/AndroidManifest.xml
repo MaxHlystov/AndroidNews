@@ -3,6 +3,7 @@
     package="ru.fmtk.khlystov.androidnews">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="ru.fmtk.khlystov.NewsApplication"
@@ -12,15 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".newslist.NewsListActivity" />
-        <activity
-            android:name=".NewsDetailesActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".about.AboutActivity"
             android:label="@string/activity_about__my_name" />
         <activity
-            android:name=".IntroActivity"
+            android:name=".intro.IntroActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <service
+            android:name="ru.fmtk.khlystov.services.UpdateDBService"
+            android:exported="false" />
+    </application>
 </manifest>

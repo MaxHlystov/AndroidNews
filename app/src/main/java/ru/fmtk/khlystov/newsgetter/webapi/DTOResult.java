@@ -1,6 +1,8 @@
 
 package ru.fmtk.khlystov.newsgetter.webapi;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -125,7 +127,7 @@ public class DTOResult implements Serializable {
         if (other == this) {
             return true;
         }
-        if (other == null || !(other instanceof DTOResult)) {
+        if (!(other instanceof DTOResult)) {
             return false;
         }
         DTOResult rhs = ((DTOResult) other);

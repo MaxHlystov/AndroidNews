@@ -1,10 +1,25 @@
 package ru.fmtk.khlystov.utils;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import ru.fmtk.khlystov.NewsApplication;
+import ru.fmtk.khlystov.androidnews.R;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 public class NetworkUtils {
+
+    @NonNull
+    private static final String LOG_TAG = "NewsAppNetworkUtils";
 
     public static void getImgToImageView(String imageUrl, ImageView imageView, int targetWidth, int targetHeight) {
         Picasso.get().load(imageUrl)
@@ -12,6 +27,18 @@ public class NetworkUtils {
                 .centerInside()
                 .onlyScaleDown()
                 .into(imageView);
+    }
+
+    public static boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)
+                NewsApplication.getContext().getSystemService(CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return false;
+        }
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private NetworkUtils() {

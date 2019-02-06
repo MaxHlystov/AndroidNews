@@ -13,7 +13,7 @@ import java.util.Date;
 public class EditDateConverter implements IDateConverter {
 
     @NonNull
-    private final String FORMAT_FOR_EDIT_DATE = "dd.MM.yyyy hh:mm:ss";
+    private static final String FORMAT_FOR_EDIT_DATE = "dd.MM.yyyy hh:mm:ss";
 
     @NonNull
     private final WeakReference<Context> weakContext;
@@ -43,7 +43,7 @@ public class EditDateConverter implements IDateConverter {
         ParsePosition pos = new ParsePosition(0);
         SimpleDateFormat simpledateformat;
         if (pattern == null) {
-            simpledateformat = new SimpleDateFormat();
+            simpledateformat = new SimpleDateFormat(FORMAT_FOR_EDIT_DATE);
         } else {
             simpledateformat = new SimpleDateFormat(pattern);
         }

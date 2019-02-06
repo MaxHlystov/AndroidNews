@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.fmtk.khlystov.newsgetter.Article;
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.Article;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 public class DBNewsConverter {
 

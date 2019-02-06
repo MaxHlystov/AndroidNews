@@ -1,9 +1,16 @@
 package ru.fmtk.khlystov.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.Locale;
 
@@ -25,6 +32,23 @@ public class ContextUtils {
 
     public static int getOrientation(@NonNull Context context) {
         return context.getResources().getConfiguration().orientation;
+    }
+
+    @Nullable
+    public static <T extends Activity, R> R doWithActivity(T activity, Function<T, R> function) {
+        if (activity != null) {
+            return function.apply(activity);
+        }
+        return null;
+    }
+
+    public static void popFragment(@Nullable FragmentActivity activity) {
+        if (activity != null) {
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            if (fragmentManager != null) {
+                fragmentManager.popBackStack();
+            }
+        }
     }
 
     private ContextUtils() {

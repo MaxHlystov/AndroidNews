@@ -12,9 +12,9 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import ru.fmtk.khlystov.newsgetter.Article;
-import ru.fmtk.khlystov.newsgetter.ArticleIdentificator;
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.Article;
+import ru.fmtk.khlystov.newsgetter.model.ArticleIdentificator;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 public class DBGetway {
 

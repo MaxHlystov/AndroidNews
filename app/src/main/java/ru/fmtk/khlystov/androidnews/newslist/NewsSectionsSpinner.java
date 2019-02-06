@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import ru.fmtk.khlystov.androidnews.R;
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 public class NewsSectionsSpinner {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Новостной агрегатор</string>
+    <string name="app_name">Новости Нью-йорка</string>
     <string name="photo">Фото</string>
     <string name="description">Я программирую больше двадцати лет на разных языках. И люблю решать сложные задачи.</string>
     <string name="no_email">Не найдена почтовая программа</string>
@@ -32,4 +32,13 @@
     <string name="activity_edit_news__description">Описание</string>
     <string name="activity_edit_news__content">Текст статьи</string>
     <string name="activity_edit_news__published">Дата публикации</string>
+    <string name="activity_news_details__article_saved">Изменения сохранены</string>
+    <string name="news_list_fragment__error_loading_news">Error in news getting</string>
+    <string name="update_db_service__notification_title">NY Times</string>
+    <string name="update_db_service__news_updating">Обновление новостей...</string>
+    <string name="update_db_service__stop">Остановить</string>
+    <string name="update_db_service__news_updated_successfully">Новости успешно обновлены!</string>
+    <string name="update_db_service__error_news_update">Ошибка обновления новостей.</string>
+    <string name="update_db_service__notifications_channel_name">NYT news update notifications</string>
+    <string name="update_db_service__notifications_channel_descr">The channel for update news notifications.</string>
 </resources>

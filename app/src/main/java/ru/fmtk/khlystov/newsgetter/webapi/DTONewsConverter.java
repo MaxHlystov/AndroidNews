@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import ru.fmtk.khlystov.newsgetter.Article;
-import ru.fmtk.khlystov.newsgetter.NewsResponse;
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.Article;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 import ru.fmtk.khlystov.utils.fashionutils.STDDateConverter;
 
 public class DTONewsConverter {
@@ -26,18 +25,17 @@ public class DTONewsConverter {
     }
 
     @NonNull
-    public static NewsResponse convertToNewsResponse(@Nullable DTONewsResponse dtoNewsResponse) {
-        if (dtoNewsResponse == null) {
-            return new NewsResponse(0, null);
-        }
+    public static List<Article> convertToNewsResponse(@Nullable DTONewsResponse dtoNewsResponse) {
         List<Article> articles = new ArrayList<>();
-        List<DTOResult> results = dtoNewsResponse.getResults();
-        if (results != null) {
-            for (DTOResult result : results) {
-                articles.add(convertToArticle(result));
+        if (dtoNewsResponse != null) {
+            List<DTOResult> results = dtoNewsResponse.getResults();
+            if (results != null) {
+                for (DTOResult result : results) {
+                    articles.add(convertToArticle(result));
+                }
             }
         }
-        return new NewsResponse(articles.size(), articles);
+        return articles;
     }
 
     @NonNull

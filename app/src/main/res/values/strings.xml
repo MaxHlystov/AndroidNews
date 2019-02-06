@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">News aggregator</string>
+    <string name="app_name">NYT news</string>
     <string name="photo">Photo</string>
     <string name="description">I am functional and object-oriented programmer with almost twenty years of experience. I love to solve complex problems and study new things in the world of computers/programming.</string>
     <string name="phd_text">P.h.d. in CAM</string>
@@ -34,4 +34,13 @@
     <string name="activity_edit_news__description">Description</string>
     <string name="activity_edit_news__content">Content</string>
     <string name="activity_edit_news__published">Published at</string>
+    <string name="activity_news_details__article_saved">Changed were saved.</string>
+    <string name="news_list_fragment__error_loading_news">Error in news getting</string>
+    <string name="update_db_service__notification_title">NY Times</string>
+    <string name="update_db_service__news_updating">News updating...</string>
+    <string name="update_db_service__stop">Stop</string>
+    <string name="update_db_service__news_updated_successfully">News has been successfully updated!</string>
+    <string name="update_db_service__error_news_update">Error news update.</string>
+    <string name="update_db_service__notifications_channel_name">NYT news update notifications</string>
+    <string name="update_db_service__notifications_channel_descr">The channel for update news notifications.</string>
 </resources>

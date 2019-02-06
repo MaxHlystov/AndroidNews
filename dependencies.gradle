@@ -7,7 +7,7 @@ ext.versions = [
         compileSdk         : 27,
 
         buildTools         : '27.0.3',
-        androidGradlePlugin: '3.2.1',
+        androidGradlePlugin: '3.3.0',
         supportLibs        : '27.1.1',
         rxJava             : '2.2.2',
         rxAndroid          : '2.1.0',
@@ -16,7 +16,9 @@ ext.versions = [
         converter_gson     : '2.4.0',
         adapter_rxjava     : '1.0.0',
         logging_interceptor: '3.11.0',
-        room               : '1.1.1'
+        room               : '1.1.1',
+        circleindicator    : '1.2.2',
+        work_runtime       : '1.0.0-beta01'
 ]
 
 ext.gradlePlugins = [
@@ -38,6 +40,8 @@ ext.libraries = [
         logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.logging_interceptor",
         room               : "android.arch.persistence.room:runtime:$versions.room",
         room_compiler      : "android.arch.persistence.room:compiler:$versions.room",
-        room_rxjava        : "android.arch.persistence.room:rxjava2:$versions.room"
+        room_rxjava        : "android.arch.persistence.room:rxjava2:$versions.room",
+        circleindicator    : "me.relex:circleindicator:$versions.circleindicator",
+        work_runtime       : "android.arch.work:work-runtime:$versions.work_runtime"
 
 ]
