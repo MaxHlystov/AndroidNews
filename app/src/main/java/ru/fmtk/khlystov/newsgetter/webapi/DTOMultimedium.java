@@ -1,6 +1,8 @@
 
 package ru.fmtk.khlystov.newsgetter.webapi;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -51,6 +53,7 @@ public class DTOMultimedium implements Serializable {
         this.caption = caption;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DTO-DTOMultimedium: " + url;

@@ -13,15 +13,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 @Database(entities = {NewsEntity.class, SectionEntity.class},
         version = 1,
         exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
-    @NonNull
-    private static final String LOG_TAG = "NewsAppAppDatabase";
     @NonNull
     private static final String DATABASE_NAME = "NewsDb.db";
 

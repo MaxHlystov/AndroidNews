@@ -8,12 +8,13 @@ import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class EditDateConverter implements IDateConverter {
 
     @NonNull
-    private final String FORMAT_FOR_EDIT_DATE = "dd.MM.yyyy hh:mm:ss";
+    private static final String FORMAT_FOR_EDIT_DATE = "dd.MM.yyyy hh:mm:ss";
 
     @NonNull
     private final WeakReference<Context> weakContext;
@@ -28,7 +29,8 @@ public class EditDateConverter implements IDateConverter {
         if (date == null) return "";
         Context context = weakContext.get();
         if (context != null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_FOR_EDIT_DATE);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    FORMAT_FOR_EDIT_DATE, Locale.getDefault());
             return simpleDateFormat.format(date);
         }
         return date.toString();
@@ -43,9 +45,9 @@ public class EditDateConverter implements IDateConverter {
         ParsePosition pos = new ParsePosition(0);
         SimpleDateFormat simpledateformat;
         if (pattern == null) {
-            simpledateformat = new SimpleDateFormat();
+            simpledateformat = new SimpleDateFormat(FORMAT_FOR_EDIT_DATE, Locale.getDefault());
         } else {
-            simpledateformat = new SimpleDateFormat(pattern);
+            simpledateformat = new SimpleDateFormat(pattern, Locale.getDefault());
         }
         return simpledateformat.parse(dateString, pos);
 

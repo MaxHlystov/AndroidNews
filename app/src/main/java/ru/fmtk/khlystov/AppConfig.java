@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.fmtk.khlystov.newsgetter.NewsSection;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 public class AppConfig {
 
@@ -69,7 +69,10 @@ public class AppConfig {
     }
 
     private synchronized void restore() {
-        newsSection = NewsSection.getByID(sharedPreferences.getString(PREF_NEWS_SECTION, ""));
+        String sectionId = sharedPreferences.getString(PREF_NEWS_SECTION, null);
+        if (sectionId != null) {
+            newsSection = NewsSection.getByID(sectionId);
+        }
         needToShowIntroActivityFlag = sharedPreferences.getBoolean(PREF_NEED_TO_SHOW_INTRO_ACTIVITY_FLAG, needToShowIntroActivityFlag);
     }
 }

@@ -8,7 +8,7 @@ public class NewsAndSectionEntity {
 
     @Embedded
     @NonNull
-    public NewsEntity newsEntity;
+    public final NewsEntity newsEntity;
 
     @ColumnInfo(name = "web_id")
     @NonNull

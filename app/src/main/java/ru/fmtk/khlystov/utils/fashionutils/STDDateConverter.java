@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE;
 
@@ -48,7 +49,7 @@ public class STDDateConverter implements IDateConverter {
         if(pattern == null) {
             simpledateformat = new SimpleDateFormat();
         } else {
-            simpledateformat = new SimpleDateFormat(pattern);
+            simpledateformat = new SimpleDateFormat(pattern, Locale.getDefault());
         }
         return simpledateformat.parse(dateString, pos);
 

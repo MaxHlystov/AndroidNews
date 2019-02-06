@@ -5,20 +5,32 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import ru.fmtk.khlystov.newsgetter.database.AppDatabase;
 import ru.fmtk.khlystov.newsgetter.database.DBGetway;
+import ru.fmtk.khlystov.newsgetter.model.Article;
+import ru.fmtk.khlystov.newsgetter.model.ArticleIdentificator;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 import ru.fmtk.khlystov.newsgetter.webapi.WebNewsGetter;
 
 public class NewsGetway {
 
     @NonNull
-    public static Completable updateNewsFromNYT(@NonNull Context context,
-                                                @NonNull NewsSection newsSection) {
-        return WebNewsGetter.updateNewsFromNYT(context, newsSection)
-                .map(NewsResponse::getArticles)
+    public static Completable retrieveOnlineNews(@NonNull Context context,
+                                                 @NonNull NewsSection newsSection) {
+        return retrieveOnlineNewsWithDelay(context, newsSection, 0, TimeUnit.MILLISECONDS);
+    }
+
+    @NonNull
+    public static Completable retrieveOnlineNewsWithDelay(@NonNull Context context,
+                                                          @NonNull NewsSection newsSection,
+                                                          long delay,
+                                                          @NonNull TimeUnit timeUnit) {
+        return WebNewsGetter.updateNewsFromNYT(newsSection)
+                .delay(delay, timeUnit)
                 .flatMapCompletable((List<Article> articles) -> {
                     return DBGetway.saveArticles(AppDatabase.getAppDatabase(context), articles);
                 });

@@ -15,7 +15,7 @@ import java.util.List;
 
 import ru.fmtk.khlystov.androidnews.R;
 import ru.fmtk.khlystov.utils.fashionutils.IDateConverter;
-import ru.fmtk.khlystov.newsgetter.Article;
+import ru.fmtk.khlystov.newsgetter.model.Article;
 import ru.fmtk.khlystov.utils.NetworkUtils;
 
 import static android.text.TextUtils.isEmpty;

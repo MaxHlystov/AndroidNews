@@ -1,18 +1,17 @@
 package ru.fmtk.khlystov.newsgetter.webapi;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.fmtk.khlystov.androidnews.BuildConfig;
-import ru.fmtk.khlystov.newsgetter.NewsResponse;
-import ru.fmtk.khlystov.newsgetter.NewsSection;
-
-import java.io.IOException;
-import java.util.Objects;
+import ru.fmtk.khlystov.newsgetter.model.Article;
+import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 
 public class WebNewsGetter {
@@ -23,21 +22,19 @@ public class WebNewsGetter {
     private static NewsSection section;
 
     @Nullable
-    private static Single<NewsResponse> newsObserver = null;
+    private static Single<List<Article>> newsObserver = null;
 
     @NonNull
-    public static Single<NewsResponse> updateNewsFromNYT(@NonNull Context context,
-                                                         @NonNull NewsSection section) {
+    public static Single<List<Article>> updateNewsFromNYT(@NonNull NewsSection section) {
         if (newsObserver == null
                 || WebNewsGetter.section == null
                 || !Objects.equals(WebNewsGetter.section, section)) {
-            setNewsObserver(context, section);
+            setNewsObserver(section);
         }
         return newsObserver;
     }
 
-    private static void setNewsObserver(@NonNull Context context,
-                                        @NonNull NewsSection section) {
+    private static void setNewsObserver(@NonNull NewsSection section) {
         WebNewsGetter.section = section;
         Single<DTONewsResponse> dTONewsObserver =
                 NYTNetworkAPI.createOnlineRequest(section.getID());
@@ -50,8 +47,8 @@ public class WebNewsGetter {
         newsObserver = dTONewsObserver
                 .subscribeOn(Schedulers.io())
                 .map(DTONewsConverter::convertToNewsResponse)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.computation());
+        //.observeOn(AndroidSchedulers.mainThread());
     }
 
     private WebNewsGetter() {

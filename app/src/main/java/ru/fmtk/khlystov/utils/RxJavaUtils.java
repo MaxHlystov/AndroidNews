@@ -6,7 +6,7 @@ import io.reactivex.disposables.Disposable;
 
 public class RxJavaUtils {
 
-    public static void dispose(@Nullable Disposable disposable) {
+    public static void disposeIfNotNull(@Nullable Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }

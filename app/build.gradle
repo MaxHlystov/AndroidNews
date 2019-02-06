@@ -44,5 +44,7 @@ dependencies {
     implementation libraries.logging_interceptor
     implementation libraries.room
     implementation libraries.room_rxjava
+    implementation libraries.circleindicator
+    implementation libraries.work_runtime
     annotationProcessor libraries.room_compiler
 }
