@@ -3,12 +3,12 @@ package ru.fmtk.khlystov.newsgetter.webapi;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class DTOResult implements Serializable {
 
@@ -39,7 +39,7 @@ public class DTOResult implements Serializable {
     private final static long serialVersionUID = -8046644522326767844L;
 
     public DTOResult(String section, String subsection, String title, String byline,
-                     String _abstract, String url,String publishedDate,
+                     String _abstract, String url, String publishedDate,
                      List<DTOMultimedium> multimedia) {
         super();
         this.section = section;
@@ -76,9 +76,13 @@ public class DTOResult implements Serializable {
         this.title = title;
     }
 
-    public String getByline() { return byline; }
+    public String getByline() {
+        return byline;
+    }
 
-    public void setByline(String byline) { this.byline = byline; }
+    public void setByline(String byline) {
+        this.byline = byline;
+    }
 
     public String getAbstract() {
         return _abstract;
@@ -113,8 +117,13 @@ public class DTOResult implements Serializable {
     }
 
     @Override
+    @NonNull
     public String toString() {
-        return getTitle();
+        String t = getTitle();
+        if (t == null) {
+            return "empty DTO Result";
+        }
+        return t;
     }
 
     @Override

@@ -1,18 +1,13 @@
 package ru.fmtk.khlystov.utils;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 import ru.fmtk.khlystov.NewsApplication;
-import ru.fmtk.khlystov.androidnews.R;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 

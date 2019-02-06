@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.fmtk.khlystov.androidnews.BuildConfig;
 import ru.fmtk.khlystov.newsgetter.model.Article;
@@ -49,7 +48,7 @@ public class WebNewsGetter {
                 .subscribeOn(Schedulers.io())
                 .map(DTONewsConverter::convertToNewsResponse)
                 .subscribeOn(Schedulers.computation());
-                //.observeOn(AndroidSchedulers.mainThread());
+        //.observeOn(AndroidSchedulers.mainThread());
     }
 
     private WebNewsGetter() {

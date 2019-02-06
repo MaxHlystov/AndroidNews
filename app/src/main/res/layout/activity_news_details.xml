@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/activity_news_detailes_layout__error_loading_message"
+            android:text="@string/activity_news_details_layout__error_loading_message"
             android:textColor="@color/red"
             android:textSize="@dimen/activity_news_details_layout__error_text_size"
             android:visibility="gone"

@@ -9,18 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import ru.fmtk.khlystov.androidnews.about.AboutActivity;
-import ru.fmtk.khlystov.androidnews.newsdetails.NewsDetailsFragment;
-import ru.fmtk.khlystov.androidnews.newslist.NewsListFragment;
 import ru.fmtk.khlystov.androidnews.databus.AppBusHolder;
 import ru.fmtk.khlystov.androidnews.databus.AppMessages;
 import ru.fmtk.khlystov.androidnews.databus.IDataBus;
 import ru.fmtk.khlystov.androidnews.databus.IMessageReceiver;
+import ru.fmtk.khlystov.androidnews.newsdetails.NewsDetailsFragment;
+import ru.fmtk.khlystov.androidnews.newslist.NewsListFragment;
 import ru.fmtk.khlystov.newsgetter.model.ArticleIdentificator;
 
 import static ru.fmtk.khlystov.utils.ContextUtils.isHorizontalOrientation;

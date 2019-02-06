@@ -22,10 +22,10 @@ public class NetworkStateHandler {
     private static NetworkStateHandler instance;
 
     @NonNull
-    private NetworkStateHandler.networkReceiver networkReceiver = new networkReceiver();
+    private final NetworkStateHandler.networkReceiver networkReceiver = new networkReceiver();
 
     @NonNull
-    private Subject<Boolean> mNetworkState = BehaviorSubject.createDefault(
+    private final Subject<Boolean> mNetworkState = BehaviorSubject.createDefault(
             NetworkUtils.isNetworkAvailable());
 
     @NonNull
@@ -36,6 +36,7 @@ public class NetworkStateHandler {
         return instance;
     }
 
+    @NonNull
     public NetworkStateHandler.networkReceiver getNetworkReceiver() {
         return networkReceiver;
     }

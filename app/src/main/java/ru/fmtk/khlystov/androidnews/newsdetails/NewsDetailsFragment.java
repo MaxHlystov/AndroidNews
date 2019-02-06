@@ -120,7 +120,7 @@ public class NewsDetailsFragment extends Fragment
             initViewsVariables(mainView);
         }
         if (articleId == null) {
-            showErrorLoading(getString(R.string.activity_news_detailes_layout__error_loading_message),
+            showErrorLoading(getString(R.string.activity_news_details_layout__error_loading_message),
                     new Throwable("Article identifier is not received with intent."));
         } else {
             if (article == null) {
@@ -271,7 +271,7 @@ public class NewsDetailsFragment extends Fragment
                     .subscribe(
                             this::onArticleLoad,
                             (Throwable throwable) -> this.showErrorLoading(
-                                    getString(R.string.activity_news_detailes_layout__error_loading_message),
+                                    getString(R.string.activity_news_details_layout__error_loading_message),
                                     throwable));
         }
     }
@@ -291,7 +291,7 @@ public class NewsDetailsFragment extends Fragment
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onArticleDeleted,
                                 (Throwable throwable) -> this.showErrorLoading(
-                                        getString(R.string.activity_news_detailes_layout__error_delete_article),
+                                        getString(R.string.activity_news_details_layout__error_delete_article),
                                         throwable));
                 return null;
             });
@@ -308,7 +308,7 @@ public class NewsDetailsFragment extends Fragment
                         .subscribe(
                                 this::onArticleSaved,
                                 (Throwable throwable) -> this.showErrorLoading(
-                                        getString(R.string.news_detailes_activity__error_saving_article),
+                                        getString(R.string.news_details_activity__error_saving_article),
                                         throwable)
                         );
                 return null;
@@ -328,7 +328,7 @@ public class NewsDetailsFragment extends Fragment
                 });
             } else {
                 loadStateControl.showErrorLoading(
-                        getString(R.string.activity_news_detailes_layout__error_loading_message));
+                        getString(R.string.activity_news_details_layout__error_loading_message));
             }
         }
     }
@@ -504,7 +504,7 @@ public class NewsDetailsFragment extends Fragment
         switch (message) {
             case UPDATE:
                 Log.d(LOG_TAG, "onMessageSent: " + message.toString());
-                if (!editMode && Objects.equals(articleId, argument)) {
+                if (!editMode && articleId != null && Objects.equals(articleId, argument)) {
                     readArticle(articleId);
                 }
                 break;

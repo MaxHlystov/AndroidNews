@@ -16,7 +16,8 @@ import static android.text.TextUtils.isEmpty;
 public class ImagedTextView extends LinearLayout {
 
     @Nullable
-    private String text = "";
+    private String text;
+
     @Nullable
     private Drawable image = null;
     private int imageToTextMargin = 0;

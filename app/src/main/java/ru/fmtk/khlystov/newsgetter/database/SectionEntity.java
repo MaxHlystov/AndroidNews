@@ -15,7 +15,7 @@ public class SectionEntity {
 
     @ColumnInfo(name = "web_id")
     @NonNull
-    public String webId;
+    public final String webId;
 
     public SectionEntity(@NonNull String webId) {
         this.webId = webId;

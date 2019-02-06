@@ -62,9 +62,11 @@ public class NewsApplication extends Application {
                     .build();
             Intent intent = this.registerReceiver(NetworkStateHandler.getInstance().getNetworkReceiver(),
                     new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-            manager.registerNetworkCallback(request,
-                    PendingIntent.getBroadcast(
-                            getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+            PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),
+                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if (manager != null) {
+                manager.registerNetworkCallback(request, pi);
+            }
         } else {
             registerReceiver(NetworkStateHandler.getInstance().getNetworkReceiver(),
                     new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -85,7 +87,8 @@ public class NewsApplication extends Application {
                 ExistingPeriodicWorkPolicy.KEEP, workRequest);
         WorkManager.getInstance().getWorkInfoByIdLiveData(workRequest.getId())
                 .observeForever(workInfo -> {
-                    Log.d(LOG_TAG, "Work manager onChanged. State is " + workInfo.getState());
+                    Log.d(LOG_TAG, "Work manager onChanged. State is "
+                            + (workInfo == null ? "null" : workInfo.getState()));
                 });
     }
 

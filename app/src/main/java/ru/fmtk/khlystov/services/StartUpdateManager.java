@@ -1,25 +1,19 @@
 package ru.fmtk.khlystov.services;
 
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import java.util.concurrent.TimeUnit;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import ru.fmtk.khlystov.AppConfig;
-import ru.fmtk.khlystov.androidnews.R;
 import ru.fmtk.khlystov.newsgetter.model.NewsSection;
 
 public class StartUpdateManager extends Worker {
 
     @NonNull
-    private static String LOG_TAG = "NewsAppStartUpdateManager";
+    private static final String LOG_TAG = "NewsAppStartUpdateManag";
 
     public StartUpdateManager(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

@@ -28,7 +28,7 @@ import ru.fmtk.khlystov.utils.RxJavaUtils;
 public class UpdateDBService extends Service {
 
     @NonNull
-    private static String LOG_TAG = "NewsAppUpdateDBService";
+    private static final String LOG_TAG = "NewsAppUpdateDBService";
 
     @NonNull
     private static final String UPDATE_DB_SERVICE_SECTION = "UPDATE_DB_SERVICE_SECTION_KEY";
@@ -49,7 +49,7 @@ public class UpdateDBService extends Service {
     private Disposable disposableUpdateNews = null;
 
     public static void start(@Nullable Context context, @Nullable NewsSection newsSection) {
-        Log.d(LOG_TAG, "Update static invokation.");
+        Log.d(LOG_TAG, "Update static invocation.");
         if (context != null && newsSection != null) {
             Intent intent = new Intent(context, UpdateDBService.class);
             intent.putExtra(UPDATE_DB_SERVICE_SECTION, newsSection.getID());
@@ -79,9 +79,12 @@ public class UpdateDBService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
         if (intent != null) {
-            if (intent.getAction() == UPDATE_DB_SERVICE_STOP_ACTION) {
-                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(
-                        UPDATE_DB_SERVICE_NOTIFICATION_ID);
+            if (UPDATE_DB_SERVICE_STOP_ACTION.equals(intent.getAction())) {
+                NotificationManager notificationManager =
+                        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+                if (notificationManager != null) {
+                    notificationManager.cancel(UPDATE_DB_SERVICE_NOTIFICATION_ID);
+                }
                 stopUpdate();
             } else {
                 startUpdate(intent);
@@ -102,19 +105,17 @@ public class UpdateDBService extends Service {
     private void startUpdate(Intent intent) {
         Log.d(LOG_TAG, "Local startUpdate");
         NewsSection newsSection = NewsSection.getByID(intent.getStringExtra(UPDATE_DB_SERVICE_SECTION));
-        if (newsSection != null) {
-            RxJavaUtils.disposeIfNotNull(disposableUpdateNews);
-            disposableUpdateNews = NetworkStateHandler.getInstance().getOnlineNetwork()
-                    .timeout(UPDATE_DB_SERVICE_WAIT_FOR_CONNECTION_MIN, TimeUnit.MINUTES)
-                    .flatMapCompletable(aLong -> NewsGetway.retrieveOnlineNewsWithDelay(
-                            getApplicationContext(),
-                            newsSection,
-                            UPDATE_DB_SERVICE_UPDATE_DELAY_SEC,
-                            TimeUnit.SECONDS))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onNewsLoadingComplete,
-                            this::showErrorLoading);
-        }
+        RxJavaUtils.disposeIfNotNull(disposableUpdateNews);
+        disposableUpdateNews = NetworkStateHandler.getInstance().getOnlineNetwork()
+                .timeout(UPDATE_DB_SERVICE_WAIT_FOR_CONNECTION_MIN, TimeUnit.MINUTES)
+                .flatMapCompletable(aLong -> NewsGetway.retrieveOnlineNewsWithDelay(
+                        getApplicationContext(),
+                        newsSection,
+                        UPDATE_DB_SERVICE_UPDATE_DELAY_SEC,
+                        TimeUnit.SECONDS))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onNewsLoadingComplete,
+                        this::showErrorLoading);
     }
 
     private void stopUpdate() {
@@ -158,13 +159,11 @@ public class UpdateDBService extends Service {
                         notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT))
                 .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.update_db_service__stop), piStop)
                 .setOngoing(true);
-        if (notificationBuilder != null) {
-            startForeground(UPDATE_DB_SERVICE_NOTIFICATION_ID, notificationBuilder.build());
-        }
+        startForeground(UPDATE_DB_SERVICE_NOTIFICATION_ID, notificationBuilder.build());
     }
 
     public void showEndNotification(@NonNull String text) {
-        Log.d(LOG_TAG, "showotification: " + text);
+        Log.d(LOG_TAG, "show notification: " + text);
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_ | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -175,16 +174,18 @@ public class UpdateDBService extends Service {
                 .setContentText(text)
                 .setContentIntent(PendingIntent.getActivity(this, 0,
                         notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT));
-        if (notificationBuilder != null) {
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(
-                    UPDATE_DB_SERVICE_NOTIFICATION_ID,
+        NotificationManager notificationManager =
+                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+        if (notificationManager != null) {
+            notificationManager.notify(UPDATE_DB_SERVICE_NOTIFICATION_ID,
                     notificationBuilder.build());
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannel() {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(
+        NotificationManager notificationManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         int importance = NotificationManager.IMPORTANCE_LOW;
         NotificationChannel mChannel = new NotificationChannel(
@@ -200,7 +201,8 @@ public class UpdateDBService extends Service {
 
         mChannel.enableVibration(true);
         mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-
-        mNotificationManager.createNotificationChannel(mChannel);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(mChannel);
+        }
     }
 }
